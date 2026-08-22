@@ -51,8 +51,36 @@ the Cloudflare D1 `leads` table before any notification is attempted, so a lead
 survives an email or webhook outage. Copy `.env.example` to `.env.local` and fill
 in the delivery and measurement variables documented there.
 
-Apply the D1 migration before the first production submission:
+## Deploying
+
+Local development uses a placeholder D1 database. A real deploy needs a real one,
+so create it once and keep the id:
 
 ```bash
-npx wrangler d1 migrations apply site-creator-d1 --remote
+npx wrangler login
+npx wrangler d1 create upstack-leads          # prints the database_id
 ```
+
+Export both values so the build writes them into `dist/server/wrangler.json`,
+apply the migration, then deploy:
+
+```bash
+export D1_DATABASE_NAME=upstack-leads
+export D1_DATABASE_ID=<the id wrangler printed>
+
+npm run build
+npm run db:migrate:remote                     # creates the `leads` table
+npm run deploy                                # prints the workers.dev URL
+```
+
+Set the delivery secrets on the deployed worker (they are not in the bundle):
+
+```bash
+npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put CONTACT_NOTIFICATION_TO
+npx wrangler secret put CONTACT_NOTIFICATION_FROM
+```
+
+Re-running `npm run deploy` after a change is enough; the database and secrets
+persist. Leads land in D1 whether or not email is configured, so the form is
+safe to publish before the Resend domain is verified.

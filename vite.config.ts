@@ -18,8 +18,14 @@ const localBindingConfig = {
     ? [
         {
           binding: d1,
-          database_name: "site-creator-d1",
-          database_id: SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
+          // Local dev uses the placeholder database. For a real deploy, set
+          // D1_DATABASE_ID (and optionally D1_DATABASE_NAME) so the generated
+          // dist/server/wrangler.json points at the actual database.
+          database_name: process.env.D1_DATABASE_NAME ?? "site-creator-d1",
+          database_id:
+            process.env.D1_DATABASE_ID ?? SITE_CREATOR_PLACEHOLDER_DATABASE_ID,
+          // `wrangler d1 migrations apply` looks here for the drizzle-kit SQL.
+          migrations_dir: "drizzle",
         },
       ]
     : [],
