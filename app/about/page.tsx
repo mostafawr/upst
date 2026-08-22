@@ -102,10 +102,10 @@ export default function AboutPage() {
           <div className="about-feature__visual">
             <EditorialImage
               className="editorial-image--wide"
-              src="/images/shopify-storefront.jpg"
-              alt="Monochrome storefront and workstation scene representing the customer-facing commerce layer"
-              caption="A better buying experience must be supported by a dependable operation."
-              credit="Shopify / Odoo"
+              src="/images/work-surur-architecture.jpg"
+              alt="The Surur collection page, showing the filter and sort system UPSTACK built"
+              caption="A clearer buying experience: filters, stock, and sort built into the storefront."
+              credit="Surur / Shopify"
               sizes="(max-width: 960px) 100vw, 60vw"
             />
           </div>

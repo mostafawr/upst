@@ -12,13 +12,15 @@ export const metadata = pageMetadata({
   path: "/process",
 });
 
+// One image per stage. Design and Build show real client storefronts; the
+// remaining stages stay editorial because no client screenshot depicts them.
 const processImages = [
   "/images/reports-desk.jpg",
   "/images/integration-cables.jpg",
-  "/images/shopify-storefront.jpg",
+  "/images/work-dress-code-collection.jpg",
+  "/images/work-more-cottons-catalogue.jpg",
   "/images/odoo-operations.jpg",
-  "/images/integration-cables.jpg",
-  "/images/reports-desk.jpg",
+  "/images/shopify-storefront.jpg",
 ];
 
 export default function ProcessPage() {
@@ -77,7 +79,7 @@ export default function ProcessPage() {
               <div className="process-step__image">
                 <EditorialImage
                   src={processImages[index]}
-                  alt={`Editorial office scene representing the ${step.title.toLowerCase()} stage`}
+                  alt={`Illustration for the ${step.title.toLowerCase()} stage of UPSTACK's delivery process`}
                   sizes="(max-width: 720px) 100vw, (max-width: 960px) 70vw, 30vw"
                 />
               </div>

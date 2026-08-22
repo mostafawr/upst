@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Cormorant_Garamond, Source_Serif_4 } from "next/font/google";
 import Analytics from "@/components/Analytics";
 import SiteFooter from "@/components/SiteFooter";
+import StructuredData from "@/components/StructuredData";
 import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 
@@ -58,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: new URL("/", metadataBase),
       images: [
         {
-          url: new URL("/og.png", metadataBase).toString(),
+          url: new URL("/og.jpg", metadataBase).toString(),
           width: 1200,
           height: 630,
           alt: "UPSTACK — Systems That Sell",
@@ -70,15 +71,28 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "UPSTACK — Systems That Sell",
       description:
         "Shopify storefronts, Odoo operations, and connected commerce infrastructure.",
-      images: [new URL("/og.png", metadataBase).toString()],
+      images: [new URL("/og.jpg", metadataBase).toString()],
     },
   };
 }
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const requestHeaders = await headers();
+  const host =
+    requestHeaders.get("x-forwarded-host") ??
+    requestHeaders.get("host") ??
+    "localhost:3000";
+  const protocol =
+    requestHeaders.get("x-forwarded-proto") ??
+    (host.startsWith("localhost") ? "http" : "https");
+  const origin = `${protocol}://${host}`;
+
   return (
     <html lang="en">
       <body className={`${display.variable} ${body.variable}`}>
+        <StructuredData origin={origin} />
         <Analytics
           posthogKey={process.env.POSTHOG_KEY}
           posthogHost={process.env.POSTHOG_HOST}
