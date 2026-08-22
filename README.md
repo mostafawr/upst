@@ -30,21 +30,29 @@ npm run build
 
 - `/` — Home
 - `/capabilities` — Shopify, Odoo, integration, optimization, reporting, and support
-- `/work` — disclosed concept case studies and representative engagements
+- `/work` — live client storefronts (Surur, Dress Code, More Cottons)
 - `/process` — six-stage delivery process
 - `/about` — positioning, audiences, principles, and platform expertise
-- `/contact` — accessible project brief and strategy-call enquiry form
-
-## Contact delivery
-
-The form validates in the browser and again on the server. Copy `.env.example`
-to `.env.local`, then set `CONTACT_FORM_ENDPOINT` to a secure HTTPS endpoint that
-accepts the validated enquiry JSON. If it is absent or unavailable, the form
-shows an honest delivery error and never reports a false success.
+- `/contact` — accessible enquiry form (name, phone, email, budget)
+- `/privacy` — privacy policy
+- `/terms` — terms of use
 
 ## Content integrity
 
-The current work records are explicitly labeled `Concept Case Study` or
-`Representative Engagement`. They do not claim real clients, testimonials, or
-measured performance results. Replace these entries in `lib/content.ts` only when
-verified project content is available.
+The `/work` page shows live client storefronts that UPSTACK built or operates:
+Surur, Dress Code, and More Cottons. Each entry links to the live site so the
+claim is verifiable. Scope descriptions in `app/work/page.tsx` describe work
+actually performed; no performance figures are claimed.
+
+## Lead handling
+
+Enquiries are validated in the browser and again on the server, then written to
+the Cloudflare D1 `leads` table before any notification is attempted, so a lead
+survives an email or webhook outage. Copy `.env.example` to `.env.local` and fill
+in the delivery and measurement variables documented there.
+
+Apply the D1 migration before the first production submission:
+
+```bash
+npx wrangler d1 migrations apply site-creator-d1 --remote
+```

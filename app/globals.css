@@ -358,10 +358,110 @@ button:hover .arrow-glyph {
   flex-direction: column;
   justify-content: space-between;
   padding-right: clamp(2rem, 5vw, 5rem);
+  container-type: inline-size;
+}
+
+/* Keep the longest word inside its column instead of running under the image. */
+.page-hero__copy .page-title {
+  font-size: min(clamp(4rem, 9.5vw, 9.5rem), 16.5cqi);
 }
 
 .page-hero__copy .lede {
   max-width: 590px;
+}
+
+/* Legal documents: privacy, terms. */
+.legal-hero {
+  border-bottom: 1px solid var(--rule);
+  padding: clamp(2.75rem, 6vw, 6.5rem) 0 clamp(2rem, 3.5vw, 3.5rem);
+  container-type: inline-size;
+}
+
+.legal-hero .page-title {
+  font-size: min(clamp(3.5rem, 9vw, 8rem), 30cqi);
+  margin-bottom: 1.25rem;
+}
+
+.legal-hero__lede {
+  max-width: 620px;
+}
+
+.legal-hero__meta {
+  margin-top: 1.5rem;
+}
+
+.legal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.legal-body__section {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  border-top: 1px solid var(--rule-soft);
+  padding: clamp(1.75rem, 3vw, 2.75rem) 0;
+}
+
+.legal-body__section:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.legal-body__index {
+  padding-top: 0.5rem;
+}
+
+.legal-body__content {
+  max-width: 68ch;
+}
+
+.legal-body__content p {
+  margin: 0 0 1rem;
+}
+
+.legal-body__content p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-list {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+  list-style: square;
+}
+
+.legal-list li {
+  margin-bottom: 0.35rem;
+}
+
+.legal-link {
+  border-bottom: 1px solid var(--rule-soft);
+  transition: border-color var(--ease);
+}
+
+.legal-link:hover,
+.legal-link:focus-visible {
+  border-bottom-color: var(--rule);
+}
+
+.work-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  align-items: end;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  border-bottom: 1px solid var(--rule);
+  padding: clamp(2.75rem, 6vw, 6.5rem) 0 clamp(2rem, 3.5vw, 3.5rem);
+  container-type: inline-size;
+}
+
+.work-hero .page-title {
+  font-size: min(clamp(4rem, 9.5vw, 9.5rem), 26cqi);
+  margin-bottom: 0;
+}
+
+.work-hero__lede {
+  max-width: 480px;
+  margin-bottom: 0;
 }
 
 .page-hero__image {
@@ -429,7 +529,7 @@ button:hover .arrow-glyph {
 
 .proof-band {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-bottom: 1px solid var(--rule);
 }
 
@@ -517,7 +617,7 @@ button:hover .arrow-glyph {
 
 .capability-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
 }
@@ -601,7 +701,8 @@ button:hover .arrow-glyph {
 
 .work-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* Auto-fit so the row stays balanced as the number of live builds changes. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: var(--gutter);
   margin-top: var(--gutter);
 }
@@ -771,7 +872,7 @@ button:hover .arrow-glyph {
 
 .system-map {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border: 1px solid var(--rule);
 }
 
@@ -832,7 +933,7 @@ button:hover .arrow-glyph {
 
 .case-study-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
 }
@@ -926,7 +1027,7 @@ button:hover .arrow-glyph {
 .about-grid,
 .reason-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
 }
@@ -1099,7 +1200,7 @@ button:hover .arrow-glyph {
 
 .checkbox-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.55rem 1.5rem;
   border-top: 1px solid var(--rule-soft);
   padding-top: 1rem;
@@ -1353,6 +1454,21 @@ button:hover .arrow-glyph {
   color: var(--ink-soft);
 }
 
+.site-footer__legal-links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.site-footer__legal-link {
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--ease);
+}
+
+.site-footer__legal-link:hover,
+.site-footer__legal-link:focus-visible {
+  border-bottom-color: currentColor;
+}
+
 /* Shared editorial primitives */
 .editorial-rule {
   width: 100%;
@@ -1457,7 +1573,7 @@ button:hover .arrow-glyph {
 
 .proof-band__list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .proof-band__item {
@@ -1644,7 +1760,7 @@ button:hover .arrow-glyph {
 
 .contact-form__checkbox-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.55rem 1.5rem;
   border-top: 1px solid var(--rule-soft);
   padding-top: 1rem;
@@ -2303,6 +2419,23 @@ button:hover .arrow-glyph {
   color: var(--ink-soft);
 }
 
+.retro-tv-overlay__visit {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: opacity 160ms ease;
+}
+
+.retro-tv-overlay__visit:hover,
+.retro-tv-overlay__visit:focus-visible {
+  opacity: 0.6;
+}
+
 .retro-tv-overlay__channel-num {
   font-family: "Courier New", Courier, monospace;
   font-size: 1.1rem;
@@ -2316,7 +2449,6 @@ button:hover .arrow-glyph {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: calc(100vh - 200px);
   padding: clamp(2rem, 5vw, 4rem) 0;
 }
 
@@ -2519,7 +2651,7 @@ button:hover .arrow-glyph {
   }
 
   .proof-band__list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .proof-band__item:nth-child(2) {
@@ -2610,7 +2742,7 @@ button:hover .arrow-glyph {
   .principle-grid,
   .about-grid,
   .reason-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .proof-item:nth-child(2),
@@ -2868,6 +3000,24 @@ button:hover .arrow-glyph {
 
   .home-hero__services {
     margin-top: 2rem;
+  }
+
+  .work-hero {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .legal-body__section {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .legal-body__index {
+    padding-top: 0;
+  }
+
+  .work-hero .page-title {
+    font-size: clamp(3rem, 13vw, 5rem);
   }
 
   .proof-band,

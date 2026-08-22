@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Cormorant_Garamond, Source_Serif_4 } from "next/font/google";
+import Analytics from "@/components/Analytics";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
@@ -78,6 +79,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${display.variable} ${body.variable}`}>
+        <Analytics
+          posthogKey={process.env.POSTHOG_KEY}
+          posthogHost={process.env.POSTHOG_HOST}
+          gaMeasurementId={process.env.GA_MEASUREMENT_ID}
+        />
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>

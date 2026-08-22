@@ -53,7 +53,14 @@ export function SiteFooter() {
 
       <div className="site-footer__legal">
         <span>Upstack Commerce Systems</span>
-        <span>Shopify + Odoo</span>
+        <nav className="site-footer__legal-links" aria-label="Legal">
+          <Link className="site-footer__legal-link" href="/privacy">
+            Privacy Policy
+          </Link>
+          <Link className="site-footer__legal-link" href="/terms">
+            Terms of Use
+          </Link>
+        </nav>
         <span>© {new Date().getFullYear()} Upstack</span>
       </div>
     </footer>

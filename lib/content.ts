@@ -1,9 +1,9 @@
 /**
  * Central editorial content for the UPSTACK website.
  *
- * The work examples describe concept or representative engagement patterns.
- * They deliberately contain no client identities, testimonials, or performance
- * claims. Keep that disclosure visible anywhere the examples are rendered.
+ * Work entries describe live client engagements and each carries a `liveUrl` so
+ * the claim is checkable. Describe only work actually performed, and do not add
+ * performance figures unless they are independently verifiable.
  */
 
 export const routeHrefs = [
@@ -69,20 +69,16 @@ export interface CapabilityDetail {
   readonly cta: Cta;
 }
 
-export type WorkDisclosure =
-  | "Concept Case Study"
-  | "Representative Engagement";
-
 export interface WorkEntry {
   readonly id: string;
-  readonly disclosure: WorkDisclosure;
   readonly title: string;
   readonly category: string;
   readonly summary: string;
   readonly services: readonly string[];
   readonly outcomeAreas: readonly string[];
   readonly technology: readonly string[];
-  readonly evidenceNote: string;
+  /** Live storefront, so every claim on this site is checkable. */
+  readonly liveUrl: string;
   readonly featured?: boolean;
 }
 
@@ -100,18 +96,12 @@ export interface EditorialListItem {
 }
 
 export type ContactFieldName =
-  | "firstName"
-  | "lastName"
+  | "fullName"
   | "email"
-  | "company"
-  | "website"
   | "phone"
-  | "engagementType"
-  | "servicesNeeded"
-  | "timeline"
   | "budget"
-  | "details"
-  | "referralSource";
+  | "website"
+  | "details";
 
 interface ContactFieldBase {
   readonly name: ContactFieldName;
@@ -401,101 +391,71 @@ export const capabilityDetails = [
 
 export const workEntries = [
   {
-    id: "connected-commerce-foundation",
-    disclosure: "Concept Case Study",
-    title: "Connected Commerce Foundation",
-    category: "Shopify + Odoo Integration",
+    id: "more-cottons",
+    title: "More Cottons",
+    category: "Shopify + Odoo",
     summary:
-      "A concept blueprint for replacing a fragmented storefront and manual operations with one connected Shopify and Odoo system.",
+      "A home textiles retailer with a deep catalogue across bedroom, bathroom, and bridal. UPSTACK runs the Shopify storefront and the Odoo operation behind it, so the catalogue and the warehouse agree.",
     services: [
-      "Commerce strategy",
-      "Shopify UX and architecture",
-      "Odoo solution design",
-      "Integration architecture",
-      "Reporting plan",
+      "Storefront management",
+      "Catalogue and merchandising",
+      "Odoo implementation",
+      "Inventory and fulfillment operations",
+      "Reporting",
     ],
     outcomeAreas: [
-      "Customer journey clarity",
-      "Order-to-fulfillment continuity",
+      "Catalogue depth without confusion",
+      "Inventory accuracy",
       "Operational visibility",
-      "Scalable delivery planning",
+      "Reporting the team uses",
     ],
-    technology: ["Shopify", "Odoo", "API integration", "Analytics"],
-    evidenceNote:
-      "Illustrative scope only; no client identity or measured result is implied.",
+    technology: ["Shopify", "Odoo", "Inventory", "Reporting"],
+    liveUrl: "https://morecottons.com",
     featured: true,
   },
   {
-    id: "storefront-performance-system",
-    disclosure: "Representative Engagement",
-    title: "Storefront Performance System",
-    category: "Shopify + Optimization",
+    id: "surur",
+    title: "Surur",
+    category: "Shopify Storefront",
     summary:
-      "A representative engagement pattern for clarifying product discovery, strengthening Shopify performance, and creating an evidence-led optimization roadmap.",
+      "A modern furniture retailer selling across rooms and collections. Built as a bilingual Shopify storefront where browsing by room and by collection both lead cleanly to the product.",
     services: [
-      "UX review",
       "Store architecture",
-      "Theme development",
-      "Performance optimization",
-      "Measurement planning",
+      "Shopify theme build",
+      "Bilingual EN/AR setup",
+      "Collection and navigation design",
+      "Product merchandising",
     ],
     outcomeAreas: [
-      "Product discovery",
-      "Checkout clarity",
-      "Storefront performance",
-      "Optimization readiness",
+      "Room-led discovery",
+      "Bilingual parity",
+      "Collection clarity",
+      "Product presentation",
     ],
-    technology: ["Shopify", "Liquid", "Web performance", "Analytics"],
-    evidenceNote:
-      "Representative scope only; no named client or performance claim is presented.",
+    technology: ["Shopify", "Liquid", "Bilingual storefront"],
+    liveUrl: "https://surureg.com",
   },
   {
-    id: "operational-control-layer",
-    disclosure: "Representative Engagement",
-    title: "Operational Control Layer",
-    category: "Odoo Implementation",
+    id: "dress-code",
+    title: "Dress Code",
+    category: "Shopify Storefront",
     summary:
-      "A representative Odoo implementation model for bringing sales, inventory, purchasing, finance, fulfillment, and reporting into a governed operating system.",
+      "An Egyptian fashion label running frequent drops and promotions. Built as a Shopify storefront where new arrivals, campaign offers, and instalment payments stay clear at every step.",
     services: [
-      "Operational discovery",
-      "Odoo configuration",
-      "Workflow design",
-      "Data migration planning",
-      "Training",
+      "Store architecture",
+      "Shopify theme build",
+      "Campaign and promotion setup",
+      "Instalment payment integration",
+      "Collection merchandising",
     ],
     outcomeAreas: [
-      "Process consistency",
-      "Inventory visibility",
-      "Financial control",
-      "Team adoption",
+      "Fast drop turnaround",
+      "Offer clarity",
+      "Checkout confidence",
+      "Repeat browsing",
     ],
-    technology: ["Odoo", "CRM", "Inventory", "Accounting", "Reporting"],
-    evidenceNote:
-      "Representative scope only; no named client or performance claim is presented.",
-  },
-  {
-    id: "commerce-intelligence-layer",
-    disclosure: "Concept Case Study",
-    title: "Commerce Intelligence Layer",
-    category: "Data + Yield Maximization",
-    summary:
-      "A concept measurement system linking Shopify demand signals with Odoo inventory, fulfillment, and margin data for more informed decisions.",
-    services: [
-      "KPI design",
-      "Data modeling",
-      "Dashboard planning",
-      "Margin analysis",
-      "Optimization roadmap",
-    ],
-    outcomeAreas: [
-      "Shared performance definitions",
-      "Commercial visibility",
-      "Inventory decision support",
-      "Prioritized improvement",
-    ],
-    technology: ["Shopify", "Odoo", "Data integration", "Reporting"],
-    evidenceNote:
-      "Illustrative scope only; no client identity or measured result is implied.",
+    technology: ["Shopify", "Liquid", "Sympl instalments"],
+    liveUrl: "https://dresscodeme.com",
   },
 ] as const satisfies readonly WorkEntry[];
 
@@ -673,7 +633,7 @@ export const footerContent = {
     },
   ],
   legalLine:
-    "No client identities, testimonials, or unverified performance claims are presented on this site.",
+    "Work shown on this site is live client work. No performance figures are claimed unless independently verifiable.",
 } as const;
 
 export const homePage = {
@@ -728,9 +688,7 @@ export const workPage = {
   eyebrow: "Work",
   title: "Selected Systems.",
   description:
-    "Representative Shopify, Odoo, integration, data, and optimization scopes presented without fabricated client names or results.",
-  disclosure:
-    "The entries below are labeled Concept Case Study or Representative Engagement. They describe illustrative or representative scopes and do not claim named clients, testimonials, or measured outcomes.",
+    "Live Shopify storefronts and connected Odoo operations, built and run by UPSTACK.",
   outcomeLabel: "Outcome Areas",
   technologyLabel: "Technology",
   servicesLabel: "Services",
@@ -761,151 +719,59 @@ export const aboutPage = {
     "The aim is simple: a clearer buying experience, a more dependable operation, and a system the business can continue to improve.",
 } as const;
 
-export const engagementChoices = [
-  "Shopify Store Design",
-  "Shopify Development",
-  "Odoo Implementation",
-  "Shopify–Odoo Integration",
-  "Conversion Optimization",
-  "Ongoing Support",
-  "Not Sure Yet",
-] as const;
-
-export const servicesNeededChoices = [
-  "Ecommerce & Operational Strategy",
-  "Shopify UX & Store Architecture",
-  "Shopify Design",
-  "Shopify Development",
-  "Odoo Implementation",
-  "Shopify–Odoo Integration",
-  "Data & Reporting",
-  "Conversion & Performance Optimization",
-  "Ongoing Systems Support",
-] as const;
-
-export const timelineChoices = [
-  "Ready to begin",
-  "Within 1–3 months",
-  "Within 3–6 months",
-  "More than 6 months",
-  "Exploring options",
-] as const;
-
 export const budgetChoices = [
-  "Below US$15,000",
-  "US$15,000–30,000",
-  "US$30,000–60,000",
-  "US$60,000–100,000",
-  "US$100,000+",
-  "Prefer to discuss",
-] as const;
-
-export const referralChoices = [
-  "Search engine",
-  "Professional referral",
-  "Existing relationship",
-  "Shopify community",
-  "Odoo community",
-  "Social media or publication",
-  "Event or conference",
-  "Other",
+  "US$500–1,000",
+  "US$1,000–2,000",
+  "US$2,000+",
 ] as const;
 
 export const contactFields = [
   {
-    name: "firstName",
-    label: "First name",
+    name: "fullName",
+    label: "Name",
     kind: "text",
     required: true,
-    autoComplete: "given-name",
-  },
-  {
-    name: "lastName",
-    label: "Last name",
-    kind: "text",
-    required: true,
-    autoComplete: "family-name",
-  },
-  {
-    name: "email",
-    label: "Work email",
-    kind: "email",
-    required: true,
-    autoComplete: "email",
-    placeholder: "name@company.com",
-  },
-  {
-    name: "company",
-    label: "Company",
-    kind: "text",
-    required: true,
-    autoComplete: "organization",
-  },
-  {
-    name: "website",
-    label: "Website",
-    kind: "url",
-    required: true,
-    autoComplete: "url",
-    placeholder: "https://",
+    autoComplete: "name",
   },
   {
     name: "phone",
     label: "Phone",
     kind: "tel",
-    required: false,
+    required: true,
     autoComplete: "tel",
-    helpText: "Optional",
   },
   {
-    name: "engagementType",
-    label: "Engagement type",
-    kind: "select",
+    name: "email",
+    label: "Email",
+    kind: "email",
     required: true,
-    placeholder: "Select one",
-    options: engagementChoices,
-  },
-  {
-    name: "servicesNeeded",
-    label: "Services needed",
-    kind: "checkbox-group",
-    required: true,
-    helpText: "Select all that apply.",
-    options: servicesNeededChoices,
-  },
-  {
-    name: "timeline",
-    label: "Project timeline",
-    kind: "select",
-    required: true,
-    placeholder: "Select a timeline",
-    options: timelineChoices,
+    autoComplete: "email",
   },
   {
     name: "budget",
-    label: "Budget range",
+    label: "Budget",
     kind: "select",
-    required: false,
+    required: true,
     placeholder: "Select a range",
-    helpText: "Optional",
     options: budgetChoices,
   },
   {
-    name: "details",
-    label: "Project details",
-    kind: "textarea",
-    required: true,
-    rows: 7,
-    placeholder:
-      "Describe the current storefront, operational system, priority, and constraint.",
+    name: "website",
+    label: "Website",
+    kind: "url",
+    required: false,
+    autoComplete: "url",
+    placeholder: "example.com",
+    helpText: "Optional",
   },
   {
-    name: "referralSource",
-    label: "How did you hear about UPSTACK?",
-    kind: "select",
-    required: true,
-    placeholder: "Select a source",
-    options: referralChoices,
+    name: "details",
+    label: "What do you need?",
+    kind: "textarea",
+    required: false,
+    rows: 5,
+    placeholder:
+      "A Shopify store, an Odoo setup, or the connection between them.",
   },
 ] as const satisfies readonly ContactField[];
 
@@ -914,31 +780,61 @@ export const contactPage = {
   eyebrow: "Book a Call",
   title: "Start with the System.",
   description:
-    "Tell us where Shopify, Odoo, or the connection between them is limiting the business. We will use the brief to prepare a focused first conversation.",
+    "Tell us where Shopify, Odoo, or the connection between them is limiting the business. Four fields is all it takes to start.",
   aside: {
-    title: "A Useful Brief Includes",
+    title: "What Happens Next",
     items: [
-      "The commercial priority",
-      "The current Shopify and Odoo setup",
-      "Operational constraints",
-      "Timing and decision context",
+      "We read your enquiry the same working day",
+      "We call or email to understand the priority",
+      "You get a focused first conversation",
+      "No obligation, no scripted pitch",
     ],
   },
   form: {
-    title: "Project Brief",
+    title: "Tell Us What Must Work Better.",
     description:
-      "Required fields are marked. Phone and budget range are optional.",
-    submitLabel: "Send Project Brief",
-    loadingLabel: "Sending Project Brief…",
-    successTitle: "Brief Received.",
+      "Name, phone, email, and budget are required. Everything else is optional.",
+    submitLabel: "Submit Enquiry",
+    loadingLabel: "Sending…",
+    successTitle: "Enquiry received.",
     successMessage:
-      "Thank you. Your project context has been recorded for review.",
-    errorTitle: "The Brief Was Not Sent.",
+      "Thank you. We will be in touch to arrange the first conversation.",
+    errorTitle: "The Enquiry Was Not Sent.",
     errorMessage:
-      "Please review the form and try again. Keep a copy of your project details if the issue continues.",
+      "Please review the form and try again. Keep a copy of your details if the issue continues.",
     privacyNote:
-      "Submit only the information needed to evaluate the engagement. Do not include passwords, credentials, or sensitive customer data.",
+      "We use your contact details only to respond to this enquiry. Do not include passwords, credentials, or sensitive customer data.",
     fields: contactFields,
+  },
+} as const;
+
+/**
+ * Business identity used by the legal pages and structured data.
+ * `contactEmail` is optional: when empty, the policies direct people to the
+ * enquiry form instead of showing an address that does not exist.
+ */
+export const legalInfo = {
+  entityName: "UPSTACK Commerce Systems",
+  location: "Cairo, Egypt",
+  jurisdiction: "Egypt",
+  contactEmail: "",
+  lastUpdated: "22 August 2026",
+} as const;
+
+export const legalPages = {
+  privacy: {
+    route: "/privacy",
+    eyebrow: "Legal",
+    title: "Privacy Policy.",
+    description:
+      "What UPSTACK collects when you send an enquiry or browse this site, why, and how to have it removed.",
+  },
+  terms: {
+    route: "/terms",
+    eyebrow: "Legal",
+    title: "Terms of Use.",
+    description:
+      "The terms that apply to this website and to enquiries sent through it.",
   },
 } as const;
 
