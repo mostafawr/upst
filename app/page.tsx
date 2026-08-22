@@ -71,10 +71,10 @@ export default function Home() {
           </div>
           <EditorialImage
             className="editorial-image--hero"
-            src="/images/hero-workstation.jpg"
-            alt="Archival-style desktop workstation surrounded by printed commerce and operations reports"
-            caption="The customer-facing store and the operation behind it, designed as one system."
-            credit="UPSTACK / Edition 01"
+            src="/images/work-surur-product.jpg"
+            alt="The Surur product page built by UPSTACK, showing variants and room context"
+            caption="A Surur product page: variants, room context, and a clear path to checkout."
+            credit="Surur / Shopify"
             sizes="(max-width: 960px) 100vw, 68vw"
             priority
           />

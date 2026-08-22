@@ -54,10 +54,10 @@ export default function AboutPage() {
         <div className="page-hero__image">
           <EditorialImage
             className="editorial-image--hero"
-            src="/images/hero-workstation.jpg"
-            alt="Archival workstation scene linking commerce technology with printed operational reports"
+            src="/images/work-more-cottons-product.jpg"
+            alt="A More Cottons product page, with variants, size guide, and instalment payments"
             caption="Customer experience and business operations, designed together."
-            credit="About UPSTACK"
+            credit="More Cottons / Shopify"
             priority
             sizes="(max-width: 960px) 100vw, 52vw"
           />
@@ -156,10 +156,10 @@ export default function AboutPage() {
       <section className="section section--ruled">
         <EditorialImage
           className="editorial-image--strip"
-          src="/images/odoo-operations.jpg"
-          alt="Operational workstation with ERP-style screen, binders, and commerce paperwork"
-          caption="Specialized in the connection between the customer-facing and operational layers."
-          credit="UPSTACK Commerce Systems"
+          src="/images/odoo-inventory-overview.jpg"
+          alt="The Odoo inventory interface, showing receipts, delivery orders, and manufacturing"
+          caption="Receipts, deliveries, and manufacturing tracked in one operational view."
+          credit="Odoo interface"
           variant="wide"
           sizes="100vw"
         />

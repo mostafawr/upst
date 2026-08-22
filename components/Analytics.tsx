@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { posthogConfig } from "@/lib/analytics-config";
 
 interface AnalyticsProps {
   posthogKey?: string;
@@ -41,14 +42,16 @@ export default function Analytics({
   useEffect(() => {
     if (!posthogKey) return;
 
-    const host = posthogHost || "https://us.i.posthog.com";
+    const host = posthogHost || posthogConfig.host;
 
     import("posthog-js")
       .then(({ default: posthog }) => {
         posthog.init(posthogKey, {
           api_host: host,
-          defaults: "2025-05-24",
-          capture_pageview: true,
+          defaults: posthogConfig.defaults,
+          // Client-side navigation is history-based here, so pageviews must be
+          // captured on history change rather than only on first load.
+          capture_pageview: "history_change",
           capture_pageleave: true,
           person_profiles: "identified_only",
         });

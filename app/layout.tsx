@@ -4,6 +4,7 @@ import { Cormorant_Garamond, Source_Serif_4 } from "next/font/google";
 import Analytics from "@/components/Analytics";
 import SiteFooter from "@/components/SiteFooter";
 import StructuredData from "@/components/StructuredData";
+import { posthogConfig } from "@/lib/analytics-config";
 import SiteHeader from "@/components/SiteHeader";
 import "./globals.css";
 
@@ -94,8 +95,8 @@ export default async function RootLayout({
       <body className={`${display.variable} ${body.variable}`}>
         <StructuredData origin={origin} />
         <Analytics
-          posthogKey={process.env.POSTHOG_KEY}
-          posthogHost={process.env.POSTHOG_HOST}
+          posthogKey={posthogConfig.key}
+          posthogHost={posthogConfig.host}
           gaMeasurementId={process.env.GA_MEASUREMENT_ID}
         />
         <a className="skip-link" href="#main-content">

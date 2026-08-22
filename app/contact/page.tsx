@@ -24,10 +24,10 @@ export default function ContactPage() {
         <div className="page-hero__image">
           <EditorialImage
             className="editorial-image--hero"
-            src="/images/reports-desk.jpg"
-            alt="Project reports and planning materials prepared for a commerce systems review"
-            caption="A focused first conversation begins with useful context."
-            credit="Project Brief / Edition 01"
+            src="/images/work-more-cottons-bathrobes.jpg"
+            alt="The More Cottons bathrobe collection, with filtering, compare, and sort"
+            caption="Work we have shipped. Tell us what you need next."
+            credit="More Cottons / Shopify"
             priority
             sizes="(max-width: 960px) 100vw, 52vw"
           />
