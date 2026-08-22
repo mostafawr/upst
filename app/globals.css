@@ -1,14 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --paper: #f2eee3;
-  --paper-deep: #e7e0d2;
-  --paper-light: #f8f5ed;
+  --paper: #f3ede0;
+  --paper-deep: #e8dfcc;
+  --paper-light: #f9f6ee;
   --ink: #121311;
-  --ink-soft: #59584f;
-  --ink-faint: #59584f;
+  --ink-soft: #5a5347;
+  --ink-faint: #5a5347;
   --rule: rgba(18, 19, 17, 0.72);
   --rule-soft: rgba(18, 19, 17, 0.24);
+  /* Oxblood, borrowed from broadsheet section rules. Used sparingly: hairlines,
+     labels, and arrows — never for body copy, so contrast never depends on it. */
+  --accent: #8c3123;
+  --accent-soft: rgba(140, 49, 35, 0.28);
   --display: var(--font-display), "Bodoni 72", Didot, "Times New Roman", serif;
   --body: var(--font-body), "Iowan Old Style", Baskerville, Georgia, serif;
   --sans: Arial, Helvetica, sans-serif;
@@ -162,6 +166,18 @@ p {
   text-transform: uppercase;
 }
 
+/* Section eyebrows, index numbers, and category labels carry the accent; body
+   copy never does, so no text depends on it for legibility.
+   Contrast of #8c3123 on --paper is 6.98:1, which passes AA at this size. */
+.eyebrow,
+.card-label,
+.capability-card__index,
+.capability-ledger__index,
+.legal-body__index,
+.process-step__number {
+  color: var(--accent);
+}
+
 .eyebrow {
   display: flex;
   align-items: center;
@@ -172,7 +188,7 @@ p {
 .eyebrow::after {
   width: 42px;
   height: 1px;
-  background: currentColor;
+  background: var(--accent);
   content: "";
 }
 
@@ -290,9 +306,24 @@ p {
 
 .arrow-glyph {
   display: inline-block;
+  color: var(--accent);
   font-family: var(--sans);
   font-size: 0.85em;
   transition: transform var(--ease);
+}
+
+/* On inverted surfaces the accent drops to 2.3:1, so the arrow inherits the
+   button's own text colour instead. */
+.button--filled .arrow-glyph,
+.cta-block__link--primary .arrow-glyph,
+.contact-form__submit-button .arrow-glyph,
+.button:hover .arrow-glyph,
+.button:focus-visible .arrow-glyph,
+.cta-block__link:hover .arrow-glyph,
+.cta-block__link:focus-visible .arrow-glyph,
+.contact-form__submit-button:hover .arrow-glyph,
+.contact-form__submit-button:focus-visible .arrow-glyph {
+  color: inherit;
 }
 
 a:hover .arrow-glyph,
@@ -1352,7 +1383,7 @@ button:hover .arrow-glyph {
   bottom: 7px;
   left: 1rem;
   height: 1px;
-  background: currentColor;
+  background: var(--accent);
   content: "";
   transform: scaleX(0);
   transform-origin: left;
@@ -2520,7 +2551,7 @@ button:hover .arrow-glyph {
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #7a7568;
+  color: #635e52;
 }
 
 /* Physical knob */
