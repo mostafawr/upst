@@ -1,22 +1,11 @@
-import {
-  budgetChoices,
-  engagementChoices,
-  referralChoices,
-  servicesNeededChoices,
-  timelineChoices,
-} from "@/lib/content";
+import { eq } from "drizzle-orm";
+import { getDb } from "@/db";
+import { leads } from "@/db/schema";
+import { budgetChoices } from "@/lib/content";
+import type { LeadPayload } from "@/lib/lead-payload";
+import { hasNotificationSink, notifyLead } from "@/lib/lead-notification";
 
-const requiredTextFields = [
-  "firstName",
-  "lastName",
-  "email",
-  "company",
-  "website",
-  "engagementType",
-  "timeline",
-  "details",
-  "referralSource",
-] as const;
+const requiredTextFields = ["fullName", "email", "phone", "budget"] as const;
 
 type ContactPayload = Record<string, unknown>;
 
@@ -24,8 +13,14 @@ function cleanText(value: unknown, maxLength = 2_000) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
-function isWorkEmail(value: string) {
+function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+/** Accepts international formats; requires enough digits to be callable. */
+function isPhone(value: string) {
+  const digits = value.replace(/[^\d]/g, "");
+  return digits.length >= 7 && digits.length <= 15;
 }
 
 function isValidWebsite(value: string) {
@@ -56,88 +51,99 @@ export async function POST(request: Request) {
     );
   }
 
-  const payload = {
-    firstName: cleanText(incoming.firstName, 80),
-    lastName: cleanText(incoming.lastName, 80),
+  const payload: LeadPayload = {
+    fullName: cleanText(incoming.fullName, 160),
     email: cleanText(incoming.email, 160),
-    company: cleanText(incoming.company, 160),
-    website: cleanText(incoming.website, 240),
-    phone: cleanText(incoming.phone, 80),
-    engagementType: cleanText(incoming.engagementType, 120),
-    servicesNeeded: Array.isArray(incoming.servicesNeeded)
-      ? incoming.servicesNeeded
-          .map((item) => cleanText(item, 120))
-          .filter(Boolean)
-          .slice(0, 10)
-      : [],
-    timeline: cleanText(incoming.timeline, 120),
+    phone: cleanText(incoming.phone, 40),
     budget: cleanText(incoming.budget, 120),
+    website: cleanText(incoming.website, 240),
     details: cleanText(incoming.details, 4_000),
-    referralSource: cleanText(incoming.referralSource, 240),
     submittedAt: new Date().toISOString(),
     source: "upstack-website",
   };
 
   const missing = requiredTextFields.filter((field) => !payload[field]);
-  const invalidChoice =
-    !isAllowed(payload.engagementType, engagementChoices) ||
-    !isAllowed(payload.timeline, timelineChoices) ||
-    !isAllowed(payload.referralSource, referralChoices) ||
-    (payload.budget ? !isAllowed(payload.budget, budgetChoices) : false) ||
-    payload.servicesNeeded.some(
-      (service) => !isAllowed(service, servicesNeededChoices),
-    );
 
   if (
     missing.length ||
-    !isWorkEmail(payload.email) ||
-    !isValidWebsite(payload.website) ||
-    invalidChoice ||
-    payload.servicesNeeded.length === 0
+    !isEmail(payload.email) ||
+    !isPhone(payload.phone) ||
+    !isAllowed(payload.budget, budgetChoices) ||
+    // Optional, but a supplied website must still be usable.
+    (payload.website && !isValidWebsite(payload.website))
   ) {
     return Response.json(
       {
-        message: "Please complete each required field with a valid work email.",
-        fields:
-          payload.servicesNeeded.length === 0
-            ? [...missing, "servicesNeeded"]
-            : missing,
+        message: "Please complete each required field with valid contact details.",
+        fields: missing,
       },
       { status: 422 },
     );
   }
 
-  const endpoint = process.env.CONTACT_FORM_ENDPOINT;
+  // The database is the record of truth: persist before notifying so an enquiry
+  // is never lost when email or the webhook is down.
+  const stored = await storeLead(payload);
+  const notified = await notifyLead(payload);
 
-  if (!endpoint) {
-    return Response.json(
-      {
-        message:
-          "Enquiry delivery is not configured yet. Add the contact endpoint before publishing the form.",
-      },
-      { status: 503 },
-    );
+  if (stored !== null && notified) {
+    await markNotified(stored);
   }
 
-  try {
-    const forwarded = await fetch(endpoint, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    if (!forwarded.ok) {
+  if (!stored && !notified) {
+    if (!hasNotificationSink()) {
       return Response.json(
-        { message: "The enquiry service is temporarily unavailable. Please try again shortly." },
-        { status: 502 },
+        {
+          message:
+            "Enquiry delivery is not configured yet. Add the contact endpoint before publishing the form.",
+        },
+        { status: 503 },
       );
     }
 
-    return Response.json({ ok: true });
-  } catch {
     return Response.json(
-      { message: "The enquiry service could not be reached. Please try again shortly." },
+      { message: "The enquiry service is temporarily unavailable. Please try again shortly." },
       { status: 502 },
     );
+  }
+
+  return Response.json({ ok: true });
+}
+
+/** Returns the new row id, or null when D1 is unavailable. */
+async function storeLead(payload: LeadPayload): Promise<number | null> {
+  try {
+    const db = await getDb();
+    const row = await db
+      .insert(leads)
+      .values({
+        fullName: payload.fullName,
+        email: payload.email,
+        phone: payload.phone,
+        budget: payload.budget,
+        website: payload.website,
+        details: payload.details,
+        source: payload.source,
+      })
+      .returning({ id: leads.id })
+      .get();
+
+    return row?.id ?? null;
+  } catch (error) {
+    console.error("Lead could not be stored in D1.", error);
+    return null;
+  }
+}
+
+async function markNotified(id: number) {
+  try {
+    const db = await getDb();
+    await db
+      .update(leads)
+      .set({ notifiedAt: new Date().toISOString() })
+      .where(eq(leads.id, id))
+      .run();
+  } catch (error) {
+    console.error("Lead stored but notification timestamp could not be set.", error);
   }
 }

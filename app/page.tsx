@@ -23,10 +23,9 @@ export const metadata = pageMetadata({
 });
 
 const workImages: Record<string, string> = {
-  "connected-commerce-foundation": "/images/hero-workstation.jpg",
-  "storefront-performance-system": "/images/shopify-storefront.jpg",
-  "operational-control-layer": "/images/odoo-operations.jpg",
-  "commerce-intelligence-layer": "/images/reports-desk.jpg",
+  "more-cottons": "/images/work-more-cottons.jpg",
+  surur: "/images/work-surur.jpg",
+  "dress-code": "/images/work-dress-code.jpg",
 };
 
 export default function Home() {
@@ -72,10 +71,10 @@ export default function Home() {
           </div>
           <EditorialImage
             className="editorial-image--hero"
-            src="/images/hero-workstation.jpg"
-            alt="Archival-style desktop workstation surrounded by printed commerce and operations reports"
-            caption="The customer-facing store and the operation behind it, designed as one system."
-            credit="UPSTACK / Edition 01"
+            src="/images/work-surur-product.jpg"
+            alt="The Surur product page built by UPSTACK, showing variants and room context"
+            caption="A Surur product page: variants, room context, and a clear path to checkout."
+            credit="Surur / Shopify"
             sizes="(max-width: 960px) 100vw, 68vw"
             priority
           />
@@ -141,12 +140,12 @@ export default function Home() {
           <div>
             <p className="eyebrow">{homePage.featuredWork.eyebrow}</p>
             <h2 className="section-title" id="work-heading">
-              Representative Systems.
+              Live Systems.
             </h2>
           </div>
           <p className="body-large muted">
-            Illustrative and representative scopes—clearly labeled, with no invented
-            client names or performance claims.
+            Storefronts and operations running in production today. Every entry
+            links to the live site.
           </p>
         </div>
 
@@ -155,14 +154,14 @@ export default function Home() {
             <EditorialImage
               className="editorial-image--wide"
               src={workImages[featured.id]}
-              alt="Vintage workstation visualizing a connected commerce operating system"
-              caption={featured.disclosure}
-              credit="Shopify / Odoo / Integration"
+              alt={`The ${featured.title} storefront built by UPSTACK`}
+              caption={featured.category}
+              credit="Live in production"
               sizes="(max-width: 960px) 100vw, 66vw"
             />
           </div>
           <div className="selected-work__copy">
-            <p className="card-label">Featured / {featured.disclosure}</p>
+            <p className="card-label">Featured / {featured.category}</p>
             <h3 className="subsection-title">{featured.title}</h3>
             <p>{featured.summary}</p>
             <ul className="tag-list" aria-label="Featured engagement services">
@@ -173,7 +172,7 @@ export default function Home() {
               ))}
             </ul>
             <Link className="text-link" href="/work">
-              View the Full Record <ArrowGlyph />
+              See the Build <ArrowGlyph />
             </Link>
           </div>
         </article>
@@ -181,17 +180,17 @@ export default function Home() {
         <div className="work-grid">
           {secondaryWork.map((entry) => (
             <article className="work-card" key={entry.id}>
-              <span className="card-label">{entry.disclosure}</span>
+              <span className="card-label">{entry.category}</span>
               <EditorialImage
                 className="work-card__image editorial-image--card"
                 src={workImages[entry.id]}
-                alt={`Editorial image representing ${entry.category.toLowerCase()}`}
+                alt={`The ${entry.title} storefront built by UPSTACK`}
                 sizes="(max-width: 720px) 100vw, (max-width: 960px) 50vw, 33vw"
               />
               <h3 className="work-card__title">{entry.title}</h3>
               <p className="work-card__summary">{entry.summary}</p>
               <Link className="text-link" href="/work">
-                Review Scope <ArrowGlyph />
+                Review the Build <ArrowGlyph />
               </Link>
             </article>
           ))}

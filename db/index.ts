@@ -1,8 +1,15 @@
-import { env } from "cloudflare:workers";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./schema";
 
-export function getDb() {
+/**
+ * Resolves the Drizzle client for the D1 binding.
+ *
+ * `cloudflare:workers` is imported dynamically so this module stays loadable
+ * outside the Workers runtime — the rendered-HTML test suite imports the built
+ * worker in plain Node, where that specifier does not resolve.
+ */
+export async function getDb() {
+  const { env } = await import("cloudflare:workers");
   const bindings = env as typeof env & { DB?: D1Database };
 
   if (!bindings.DB) {

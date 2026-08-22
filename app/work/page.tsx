@@ -1,6 +1,8 @@
-import { pageMetadata } from "@/lib/metadata";
+import { CTABlock } from "@/components/EditorialPrimitives";
 import RetroTVCarousel from "@/components/RetroTVCarousel";
 import type { TVChannel } from "@/components/RetroTVCarousel";
+import { workPage } from "@/lib/content";
+import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
   title: "Work",
@@ -11,80 +13,94 @@ export const metadata = pageMetadata({
 
 const tvChannels: TVChannel[] = [
   {
-    id: "saint-supply",
-    brand: "Saint Supply Skincare",
-    tagline: "Ritual Made Simple.",
+    id: "surur",
+    brand: "Surur",
+    tagline: "The Mood of Wood.",
     subtitle:
-      "A clean-beauty DTC brand that needed a Shopify storefront matching the quality of its formulas — clinical, minimal, and conversion-focused.",
+      "A modern furniture retailer selling across rooms and collections. Built as a bilingual Shopify storefront where browsing by room and by collection both lead cleanly to the product.",
     category: "Shopify Storefront",
     services: [
-      "Commerce Strategy",
-      "UX & Store Architecture",
-      "Custom Shopify Theme",
-      "Checkout Optimization",
-      "Performance Tuning",
+      "Store Architecture",
+      "Shopify Theme Build",
+      "Bilingual EN/AR Setup",
+      "Collection & Navigation Design",
+      "Product Merchandising",
     ],
-    technology: ["Shopify", "Liquid", "Headless CMS", "Analytics"],
-    image: "/images/mockup-skincare.png",
+    technology: ["Shopify", "Liquid", "Bilingual Storefront"],
+    image: "/images/work-surur.jpg",
+    href: "https://surureg.com",
   },
   {
-    id: "forma-home",
-    brand: "Forma Home",
-    tagline: "Designed for How You Live.",
+    id: "dress-code",
+    brand: "Dress Code",
+    tagline: "New Collection.",
     subtitle:
-      "A contemporary furniture brand bridging online discovery with showroom-grade presentation — built for clarity, scale, and operational flow.",
-    category: "Shopify + Odoo Integration",
+      "An Egyptian fashion label running frequent drops and promotions. Built as a Shopify storefront where new arrivals, campaign offers, and instalment payments stay clear at every step.",
+    category: "Shopify Storefront",
     services: [
-      "Commerce Strategy",
-      "Shopify UX Design",
-      "Odoo Inventory Setup",
-      "Shopify–Odoo Integration",
-      "Reporting Dashboard",
+      "Store Architecture",
+      "Shopify Theme Build",
+      "Campaign & Promotion Setup",
+      "Instalment Payment Integration",
+      "Collection Merchandising",
     ],
-    technology: ["Shopify", "Odoo", "API Integration", "Analytics"],
-    image: "/images/mockup-furniture.png",
+    technology: ["Shopify", "Liquid", "Sympl Instalments"],
+    image: "/images/work-dress-code.jpg",
+    href: "https://dresscodeme.com",
   },
   {
-    id: "ember-roasters",
-    brand: "Ember Roasters",
-    tagline: "Craft in Every Cup.",
+    id: "more-cottons",
+    brand: "More Cottons",
+    tagline: "Five-Star Softness at Home.",
     subtitle:
-      "A specialty coffee roaster scaling from farmers markets to nationwide DTC — with subscriptions, wholesale, and inventory connected through one system.",
-    category: "Shopify + Subscriptions",
+      "A home textiles retailer with a deep catalogue across bedroom, bathroom, and bridal. UPSTACK runs the Shopify storefront and the Odoo operation behind it, so the catalogue and the warehouse agree.",
+    category: "Shopify + Odoo",
     services: [
-      "Subscription Architecture",
-      "Shopify Development",
-      "Wholesale Portal",
-      "Odoo Inventory & Fulfillment",
-      "Measurement Planning",
+      "Storefront Management",
+      "Catalogue & Merchandising",
+      "Odoo Implementation",
+      "Inventory & Fulfillment Operations",
+      "Reporting",
     ],
-    technology: ["Shopify", "Odoo", "Subscription API", "Reporting"],
-    image: "/images/mockup-coffee.png",
-  },
-  {
-    id: "maison-noir",
-    brand: "Maison Noir",
-    tagline: "Quiet Luxury.",
-    subtitle:
-      "A European-crafted fashion label launching its DTC channel — demanding editorial-level design with full operational infrastructure behind it.",
-    category: "Full Commerce System",
-    services: [
-      "Brand Commerce Strategy",
-      "Editorial Shopify Design",
-      "Odoo ERP Implementation",
-      "Multi-currency Setup",
-      "Continuous Optimization",
-    ],
-    technology: ["Shopify", "Odoo", "Multi-currency", "CRM", "Analytics"],
-    image: "/images/mockup-fashion.png",
+    technology: ["Shopify", "Odoo", "Inventory", "Reporting"],
+    image: "/images/work-more-cottons.jpg",
+    href: "https://morecottons.com",
   },
 ];
 
 export default function WorkPage() {
   return (
-    <section className="retro-tv-page" aria-labelledby="work-title">
-      <h1 className="sr-only" id="work-title">Selected Work by UPSTACK</h1>
-      <RetroTVCarousel channels={tvChannels} />
-    </section>
+    <>
+      <header className="work-hero">
+        <div className="work-hero__copy">
+          <p className="eyebrow">{workPage.eyebrow}</p>
+          <h1 className="page-title" id="work-title">
+            Selected Systems.
+          </h1>
+        </div>
+        <p className="lede work-hero__lede">
+          Shopify storefronts and connected Odoo operations, built end to end.
+          Change the channel to walk through each build.
+        </p>
+      </header>
+
+      <section className="retro-tv-page" aria-labelledby="work-title">
+        <RetroTVCarousel channels={tvChannels} />
+      </section>
+
+      <CTABlock
+        eyebrow="Start the Conversation"
+        headline="Build the Next One."
+        body={
+          <p>
+            Tell us where the storefront, the operation, or the connection
+            between them is limiting the business.
+          </p>
+        }
+        primaryAction={{ label: "Book a Strategy Call", href: "/contact" }}
+        secondaryAction={{ label: "Review Capabilities", href: "/capabilities" }}
+        className="work-cta"
+      />
+    </>
   );
 }

@@ -12,6 +12,8 @@ export interface TVChannel {
   services: readonly string[];
   technology: readonly string[];
   image: string;
+  /** Live storefront, shown as verifiable proof in the expanded view. */
+  href?: string;
 }
 
 interface RetroTVCarouselProps {
@@ -146,6 +148,8 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
   );
 
   const expandedData = expandedChannel !== null ? channels[expandedChannel] : null;
+  const expandedChannelLabel =
+    expandedChannel !== null ? String(expandedChannel + 1).padStart(2, "0") : "";
 
   return (
     <>
@@ -210,8 +214,19 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
                 </div>
 
                 <div className="retro-tv-overlay__cta-row">
-                  <span className="retro-tv-overlay__built-by">Built by UPSTACK</span>
-                  <span className="retro-tv-overlay__channel-num">CH {String(expandedChannel + 1).padStart(2, "0")}</span>
+                  {expandedData.href ? (
+                    <a
+                      className="retro-tv-overlay__visit"
+                      href={expandedData.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit the live store →
+                    </a>
+                  ) : (
+                    <span className="retro-tv-overlay__built-by">Built by UPSTACK</span>
+                  )}
+                  <span className="retro-tv-overlay__channel-num">CH {expandedChannelLabel}</span>
                 </div>
               </div>
             </div>

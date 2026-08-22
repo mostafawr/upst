@@ -24,10 +24,10 @@ export default function ContactPage() {
         <div className="page-hero__image">
           <EditorialImage
             className="editorial-image--hero"
-            src="/images/reports-desk.jpg"
-            alt="Project reports and planning materials prepared for a commerce systems review"
-            caption="A focused first conversation begins with useful context."
-            credit="Project Brief / Edition 01"
+            src="/images/work-more-cottons-bathrobes.jpg"
+            alt="The More Cottons bathrobe collection, with filtering, compare, and sort"
+            caption="Work we have shipped. Tell us what you need next."
+            credit="More Cottons / Shopify"
             priority
             sizes="(max-width: 960px) 100vw, 52vw"
           />
@@ -37,13 +37,13 @@ export default function ContactPage() {
       <section className="section contact-layout" aria-labelledby="project-brief-title">
         <aside className="contact-sidebar">
           <div className="contact-sidebar__sticky">
-            <p className="eyebrow">Before the Call</p>
+            <p className="eyebrow">After You Send</p>
             <h2 className="subsection-title" id="project-brief-title">
               {contactPage.aside.title}
             </h2>
             <p className="muted">
-              A concise brief helps us understand whether the priority begins in the
-              storefront, the operation, or the connection between them.
+              We read every enquiry ourselves. No queue, no gatekeeper, no
+              automated qualification sequence.
             </p>
             <div className="editorial-list">
               {contactPage.aside.items.map((item, index) => (
@@ -55,21 +55,17 @@ export default function ContactPage() {
                 </div>
               ))}
             </div>
-            <p className="microcopy">
-              Do not include passwords, credentials, or sensitive customer data.
-            </p>
+            <p className="microcopy">{contactPage.form.privacyNote}</p>
           </div>
         </aside>
 
         <div className="contact-form-wrap">
           <div className="section-heading-row contact-form-heading">
             <div>
-              <p className="eyebrow">Project Brief</p>
+              <p className="eyebrow">Enquiry</p>
               <h2 className="section-title">Tell Us What Must Work Better.</h2>
             </div>
-            <p className="muted">
-              Fields marked with an asterisk are required. Phone and budget are optional.
-            </p>
+            <p className="muted">{contactPage.form.description}</p>
           </div>
           <ContactForm />
         </div>

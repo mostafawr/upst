@@ -49,6 +49,8 @@ test("all public routes render their primary content", async () => {
   const expectations = [
     ["/capabilities", /Commerce, Connected End to End/i],
     ["/work", /Selected Systems/i],
+    ["/privacy", /Privacy Policy/i],
+    ["/terms", /Terms of Use/i],
     ["/process", /From Strategy to Scale/i],
     ["/about", /One Partner for the Full Commerce System/i],
     ["/contact", /Start with the System/i],
@@ -61,14 +63,36 @@ test("all public routes render their primary content", async () => {
   }
 });
 
-test("work records are disclosed without invented results", async () => {
+test("work shows real client builds and links each live store", async () => {
   const response = await request("/work");
   const html = await response.text();
 
-  assert.match(html, /Concept Case Study/i);
-  assert.match(html, /Representative Engagement/i);
-  assert.match(html, /no named client or performance claim/i);
-  assert.doesNotMatch(html, /client satisfaction|projects delivered|revenue generated/i);
+  // Every named brand is a live site UPSTACK built or operates.
+  assert.match(html, /Surur/);
+  assert.match(html, /Dress Code/);
+  assert.match(html, /More Cottons/);
+  assert.match(html, /https:\/\/surureg\.com/);
+  assert.match(html, /https:\/\/dresscodeme\.com/);
+  assert.match(html, /https:\/\/morecottons\.com/);
+
+  // No invented brands or unverifiable performance figures.
+  assert.doesNotMatch(html, /Saint Supply|Forma Home|Ember Roasters|Maison Noir/i);
+  assert.doesNotMatch(
+    html,
+    /client satisfaction|projects delivered|revenue generated|\d+% (increase|uplift|growth)/i,
+  );
+});
+
+test("legal pages are reachable and linked from the footer", async () => {
+  for (const path of ["/privacy", "/terms"]) {
+    const response = await request(path);
+    assert.equal(response.status, 200, `${path} should render`);
+  }
+
+  const home = await request("/");
+  const html = await home.text();
+  assert.match(html, /href=["']\/privacy["']/i);
+  assert.match(html, /href=["']\/terms["']/i);
 });
 
 test("contact form exposes the complete accessible brief", async () => {
@@ -76,23 +100,34 @@ test("contact form exposes the complete accessible brief", async () => {
   const html = await response.text();
 
   for (const field of [
-    "firstName",
-    "lastName",
-    "email",
-    "company",
-    "website",
+    "fullName",
     "phone",
-    "engagementType",
-    "servicesNeeded",
-    "timeline",
+    "email",
     "budget",
+    "website",
     "details",
-    "referralSource",
   ]) {
     assert.match(html, new RegExp(`name=["']${field}["']`, "i"));
   }
 
+  // The fields removed to cut friction must stay gone.
+  for (const removed of [
+    "firstName",
+    "lastName",
+    "company",
+    "engagementType",
+    "servicesNeeded",
+    "timeline",
+    "referralSource",
+  ]) {
+    assert.doesNotMatch(html, new RegExp(`name=["']${removed}["']`, "i"));
+  }
+
   assert.match(html, /aria-label=["']Project enquiry["']/i);
+  // The three budget tiers the business sells at.
+  assert.match(html, /US\$500/);
+  assert.match(html, /US\$1,000/);
+  assert.match(html, /US\$2,000\+/);
 });
 
 test("contact API rejects incomplete data and never fakes delivery", async () => {
@@ -107,18 +142,12 @@ test("contact API rejects incomplete data and never fakes delivery", async () =>
     method: "POST",
     headers: { "content-type": "application/json", accept: "application/json" },
     body: JSON.stringify({
-      firstName: "Ada",
-      lastName: "Lovelace",
+      fullName: "Ada Lovelace",
       email: "ada@example.com",
-      company: "Example Commerce",
+      phone: "+20 100 123 4567",
+      budget: "US$1,000–2,000",
       website: "https://example.com",
-      phone: "",
-      engagementType: "Shopify–Odoo Integration",
-      servicesNeeded: ["Shopify–Odoo Integration"],
-      timeline: "Within 1–3 months",
-      budget: "",
-      details: "Connect the commerce storefront with operational inventory.",
-      referralSource: "Professional referral",
+      details: "Connect the storefront with operational inventory.",
     }),
   });
 
@@ -139,4 +168,6 @@ test("robots and sitemap use the incoming origin", async () => {
   const xml = await sitemap.text();
   assert.match(xml, /<loc>http:\/\/upstack\.test\/capabilities<\/loc>/i);
   assert.match(xml, /<loc>http:\/\/upstack\.test\/contact<\/loc>/i);
+  assert.match(xml, /<loc>http:\/\/upstack\.test\/privacy<\/loc>/i);
+  assert.match(xml, /<loc>http:\/\/upstack\.test\/terms<\/loc>/i);
 });

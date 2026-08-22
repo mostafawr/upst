@@ -25,7 +25,7 @@ export function pageMetadata({
       siteName: "UPSTACK",
       images: [
         {
-          url: "/og.png",
+          url: "/og.jpg",
           width: 1200,
           height: 630,
           alt: "UPSTACK — Systems That Sell",
@@ -36,7 +36,7 @@ export function pageMetadata({
       card: "summary_large_image",
       title: socialTitle,
       description,
-      images: ["/og.png"],
+      images: ["/og.jpg"],
     },
   };
 }

@@ -1,4 +1,13 @@
-const routes = ["", "/capabilities", "/work", "/process", "/about", "/contact"];
+const routes = [
+  "",
+  "/capabilities",
+  "/work",
+  "/process",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+];
 
 function escapeXml(value: string) {
   return value

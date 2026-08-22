@@ -28,10 +28,10 @@ export default function CapabilitiesPage() {
         <div className="page-hero__image">
           <EditorialImage
             className="editorial-image--hero"
-            src="/images/odoo-operations.jpg"
-            alt="Archival-style computer workstation with operational binders and inventory paperwork"
-            caption="Storefront experience meets operational control."
-            credit="Capabilities / 01–06"
+            src="/images/work-dress-code-product.jpg"
+            alt="A Dress Code product page built by UPSTACK, with size, colour, and instalment options"
+            caption="Size, colour, and instalment options resolved on one page."
+            credit="Dress Code / Shopify"
             priority
             sizes="(max-width: 960px) 100vw, 52vw"
           />
@@ -119,10 +119,10 @@ export default function CapabilitiesPage() {
       <section className="section section--ruled">
         <EditorialImage
           className="editorial-image--strip"
-          src="/images/integration-cables.jpg"
-          alt="Architectural network cabling representing dependable data connections"
+          src="/images/odoo-inventory-overview.jpg"
+          alt="The Odoo inventory interface, where incoming receipts hand off to outgoing deliveries"
           caption="Reliable systems are built at the handoffs."
-          credit="Platform Integration"
+          credit="Odoo interface"
           variant="wide"
           sizes="100vw"
         />
