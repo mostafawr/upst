@@ -11,6 +11,31 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
+// Vite rejects requests whose Host header it does not recognise, which protects
+// the dev server against DNS-rebinding attacks. Sharing a local preview through
+// a tunnel means the Host arrives as the tunnel's domain, so those domains have
+// to be allowed explicitly. A leading dot matches any subdomain, which matters
+// because free tunnels get a fresh random subdomain on every restart.
+//
+// This applies to `npm run dev` only. It has no effect on the deployed Worker.
+const TUNNEL_HOSTS = [
+  ".ngrok-free.dev",
+  ".ngrok-free.app",
+  ".ngrok.app",
+  ".ngrok.io",
+  ".trycloudflare.com",
+  ".loca.lt",
+];
+
+const allowedHosts = [
+  ...TUNNEL_HOSTS,
+  // Anything else, comma-separated: DEV_ALLOWED_HOSTS=preview.example.com
+  ...(process.env.DEV_ALLOWED_HOSTS ?? "")
+    .split(",")
+    .map((host) => host.trim())
+    .filter(Boolean),
+];
+
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
@@ -50,9 +75,12 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
-    server: isCodexSeatbeltSandbox
-      ? { watch: { useFsEvents: false, usePolling: true } }
-      : undefined,
+    server: {
+      allowedHosts,
+      ...(isCodexSeatbeltSandbox
+        ? { watch: { useFsEvents: false, usePolling: true } }
+        : {}),
+    },
     plugins: [
       vinext(),
       sites(),
