@@ -3401,6 +3401,47 @@ button:hover .arrow-glyph {
   }
 }
 
+/* The expanded project view was never given a mobile layout: it kept its
+   1.3fr / 0.7fr split, which on a 390px screen leaves the copy about 125px
+   wide and breaks it to three words a line. Stack it — picture above, text
+   below — which is also the only arrangement where the storefront capture
+   can be shown whole rather than cropped to a sliver. */
+@media (max-width: 720px) {
+  .retro-tv-overlay {
+    padding: 1rem;
+  }
+
+  .retro-tv-overlay__content {
+    max-height: 92vh;
+  }
+
+  .retro-tv-overlay__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .retro-tv-overlay__image {
+    border-bottom: 1px solid var(--rule-soft);
+    border-right: 0;
+  }
+
+  /* height:auto lets the capture keep its own proportions; the 500px floor
+     and object-fit: cover existed to fill a side column that is now gone. */
+  .retro-tv-overlay__img {
+    height: auto;
+    min-height: 0;
+    object-fit: contain;
+  }
+
+  /* Keeps the category chip out from under the close button. */
+  .retro-tv-overlay__details {
+    padding: 1.5rem 1.25rem 2rem;
+  }
+
+  .retro-tv-overlay__category {
+    margin-right: 3.5rem;
+  }
+}
+
 /* Phone captures are portrait, so the frames that hold them have to be too.
    The ratio matches the capture exactly (390x640), which means object-fit has
    nothing to crop. They render at roughly full column width on purpose: shrink
