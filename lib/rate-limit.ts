@@ -9,9 +9,17 @@
  * a deploy should not lock anyone out.
  */
 
-/** Submissions allowed from one address inside the window. */
-const PER_ADDRESS = 3;
-/** Submissions allowed from everyone combined, to blunt distributed spam. */
+/**
+ * Two tiers, because the two things being defended against are different.
+ *
+ * A valid enquiry costs a database write and an email, so few are allowed.
+ * A rejected one costs a JSON parse, so the ceiling is loose — it is there to
+ * stop a flood, not to punish someone who mistypes their phone number three
+ * times and would otherwise be locked out of the contact form for ten minutes.
+ */
+const ACCEPTED_PER_ADDRESS = 3;
+const REQUESTS_PER_ADDRESS = 20;
+/** Accepted enquiries from everyone combined, to blunt distributed spam. */
 const GLOBAL = 60;
 const WINDOW_MS = 10 * 60 * 1000;
 
@@ -41,7 +49,12 @@ export interface RateLimitResult {
   retryAfter: number;
 }
 
-export function checkRateLimit(address: string): RateLimitResult {
+function tooSoon(times: number[], now: number): RateLimitResult {
+  return { ok: false, retryAfter: Math.ceil((WINDOW_MS - (now - times[0])) / 1000) };
+}
+
+/** Called for every request, before the body is read. */
+export function checkRequestRate(address: string): RateLimitResult {
   const now = Date.now();
 
   // Opportunistic sweep: without it the map grows for every address ever seen.
@@ -49,17 +62,23 @@ export function checkRateLimit(address: string): RateLimitResult {
     for (const key of [...hits.keys()]) recent(key, now);
   }
 
-  const mine = recent(address, now);
+  const mine = recent(`req:${address}`, now);
+  if (mine.length >= REQUESTS_PER_ADDRESS) return tooSoon(mine, now);
+
+  hits.set(`req:${address}`, [...mine, now]);
+  return { ok: true, retryAfter: 0 };
+}
+
+/** Called only once an enquiry has passed validation and is about to be kept. */
+export function checkEnquiryRate(address: string): RateLimitResult {
+  const now = Date.now();
+  const mine = recent(`ok:${address}`, now);
   const all = recent("__global__", now);
 
-  const blocked =
-    mine.length >= PER_ADDRESS ? mine : all.length >= GLOBAL ? all : null;
+  if (mine.length >= ACCEPTED_PER_ADDRESS) return tooSoon(mine, now);
+  if (all.length >= GLOBAL) return tooSoon(all, now);
 
-  if (blocked) {
-    return { ok: false, retryAfter: Math.ceil((WINDOW_MS - (now - blocked[0])) / 1000) };
-  }
-
-  hits.set(address, [...mine, now]);
+  hits.set(`ok:${address}`, [...mine, now]);
   hits.set("__global__", [...all, now]);
   return { ok: true, retryAfter: 0 };
 }

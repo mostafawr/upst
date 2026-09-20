@@ -4,7 +4,7 @@ import { leads } from "@/db/schema";
 import { budgetChoices } from "@/lib/content";
 import type { LeadPayload } from "@/lib/lead-payload";
 import { hasNotificationSink, notifyLead } from "@/lib/lead-notification";
-import { checkRateLimit, clientAddress } from "@/lib/rate-limit";
+import { checkEnquiryRate, checkRequestRate, clientAddress } from "@/lib/rate-limit";
 
 const requiredTextFields = ["fullName", "email", "phone", "budget"] as const;
 
@@ -40,17 +40,20 @@ function isAllowed(value: string, choices: readonly string[]) {
   return choices.includes(value);
 }
 
+function tooManyRequests(retryAfter: number) {
+  return Response.json(
+    { message: "Too many enquiries from this connection. Please try again shortly." },
+    { status: 429, headers: { "retry-after": String(retryAfter) } },
+  );
+}
+
 export async function POST(request: Request) {
-  // Before parsing anything: an open form endpoint on a public origin gets
-  // found. Three enquiries in ten minutes is well past what a real person
-  // sends and well short of anything a genuine one would hit.
-  const limit = checkRateLimit(clientAddress(request));
-  if (!limit.ok) {
-    return Response.json(
-      { message: "Too many enquiries from this connection. Please try again shortly." },
-      { status: 429, headers: { "retry-after": String(limit.retryAfter) } },
-    );
-  }
+  // An open form endpoint on a public origin gets found. This first tier is
+  // the loose one: it stops a flood without counting a rejected submission
+  // against someone who is simply filling the form in wrong.
+  const address = clientAddress(request);
+  const flood = checkRequestRate(address);
+  if (!flood.ok) return tooManyRequests(flood.retryAfter);
 
   let incoming: ContactPayload;
 
@@ -92,6 +95,11 @@ export async function POST(request: Request) {
       { status: 422 },
     );
   }
+
+  // Valid, and therefore about to cost a write and an email — the tier that
+  // actually matters is checked here rather than on every request.
+  const enquiries = checkEnquiryRate(address);
+  if (!enquiries.ok) return tooManyRequests(enquiries.retryAfter);
 
   // The database is the record of truth: persist before notifying so an enquiry
   // is never lost when email or the webhook is down.
