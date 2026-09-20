@@ -67,6 +67,15 @@ export function SectionHeading({
 
 export interface EditorialImageProps {
   src: ImageProps["src"];
+  /**
+   * A phone-width capture of the same screen, shown below 560px.
+   *
+   * The desktop screenshots are the honest artefact on a wide layout, but
+   * scaled into a phone column their text is unreadable, which defeats a
+   * caption that points at what the screen does. This is art direction, not
+   * a smaller file: a different picture for a different viewport.
+   */
+  mobileSrc?: string;
   alt: string;
   caption?: ReactNode;
   credit?: ReactNode;
@@ -83,6 +92,7 @@ export interface EditorialImageProps {
 
 export function EditorialImage({
   src,
+  mobileSrc,
   alt,
   caption,
   credit,
@@ -104,18 +114,27 @@ export function EditorialImage({
     <figure
       className={joinClasses("editorial-image", className)}
       data-variant={variant}
+      data-has-mobile={mobileSrc ? "true" : undefined}
     >
       <div className="editorial-image__frame">
-        <Image
-          {...sizingProps}
-          src={src}
-          alt={alt}
-          sizes={sizes}
-          priority={priority}
-          quality={quality}
-          unoptimized={process.env.NODE_ENV !== "production"}
-          className={joinClasses("editorial-image__media", imageClassName)}
-        />
+        {/* <source> wins over the <img> srcset when its media matches, so the
+            phone capture replaces the wide one outright rather than loading
+            both. The frame switches to the capture's aspect ratio in CSS. */}
+        <picture>
+          {mobileSrc ? (
+            <source media="(max-width: 560px)" srcSet={mobileSrc} />
+          ) : null}
+          <Image
+            {...sizingProps}
+            src={src}
+            alt={alt}
+            sizes={sizes}
+            priority={priority}
+            quality={quality}
+            unoptimized={process.env.NODE_ENV !== "production"}
+            className={joinClasses("editorial-image__media", imageClassName)}
+          />
+        </picture>
       </div>
       {caption || credit ? (
         <figcaption className="editorial-image__caption">

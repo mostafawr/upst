@@ -29,6 +29,7 @@ export default function CapabilitiesPage() {
           <EditorialImage
             className="editorial-image--hero"
             src="/images/work-dress-code-product.jpg"
+            mobileSrc="/images/mobile/dress-code-product.jpg"
             alt="A Dress Code product page built by UPSTACK, with size, colour, and instalment options"
             caption="Size, colour, and instalment options resolved on one page."
             credit="Dress Code / Shopify"

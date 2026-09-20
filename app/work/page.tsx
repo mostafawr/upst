@@ -28,6 +28,7 @@ const tvChannels: TVChannel[] = [
     ],
     technology: ["Shopify", "Liquid", "Bilingual Storefront"],
     image: "/images/work-surur.jpg",
+    mobileImage: "/images/mobile/surur-product.jpg",
     href: "https://surureg.com",
   },
   {
@@ -46,6 +47,7 @@ const tvChannels: TVChannel[] = [
     ],
     technology: ["Shopify", "Liquid", "Sympl Instalments"],
     image: "/images/work-dress-code.jpg",
+    mobileImage: "/images/mobile/dress-code-product.jpg",
     href: "https://dresscodeme.com",
   },
   {
@@ -64,6 +66,7 @@ const tvChannels: TVChannel[] = [
     ],
     technology: ["Shopify", "Odoo", "Inventory", "Reporting"],
     image: "/images/work-more-cottons.jpg",
+    mobileImage: "/images/mobile/more-cottons-catalogue.jpg",
     href: "https://morecottons.com",
   },
 ];

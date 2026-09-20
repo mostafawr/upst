@@ -55,6 +55,7 @@ export default function AboutPage() {
           <EditorialImage
             className="editorial-image--hero"
             src="/images/work-more-cottons-product.jpg"
+            mobileSrc="/images/mobile/more-cottons-product.jpg"
             alt="A More Cottons product page, with variants, size guide, and instalment payments"
             caption="Customer experience and business operations, designed together."
             credit="More Cottons / Shopify"
@@ -103,6 +104,7 @@ export default function AboutPage() {
             <EditorialImage
               className="editorial-image--wide"
               src="/images/work-surur-architecture.jpg"
+              mobileSrc="/images/mobile/surur-collection.jpg"
               alt="The Surur collection page, showing the filter and sort system UPSTACK built"
               caption="A clearer buying experience: filters, stock, and sort built into the storefront."
               credit="Surur / Shopify"

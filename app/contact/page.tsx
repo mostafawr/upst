@@ -25,6 +25,7 @@ export default function ContactPage() {
           <EditorialImage
             className="editorial-image--hero"
             src="/images/work-more-cottons-bathrobes.jpg"
+            mobileSrc="/images/mobile/more-cottons-bathrobes.jpg"
             alt="The More Cottons bathrobe collection, with filtering, compare, and sort"
             caption="Work we have shipped. Tell us what you need next."
             credit="More Cottons / Shopify"

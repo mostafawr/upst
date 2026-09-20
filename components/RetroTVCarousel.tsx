@@ -12,6 +12,8 @@ export interface TVChannel {
   services: readonly string[];
   technology: readonly string[];
   image: string;
+  /** Phone-width capture of the same storefront, used below 560px. */
+  mobileImage?: string;
   /** Live storefront, shown as verifiable proof in the expanded view. */
   href?: string;
 }
@@ -217,14 +219,19 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
 
             <div className="retro-tv-overlay__layout">
               <div className="retro-tv-overlay__image">
-                <Image
-                  src={expandedData.image}
-                  alt={`${expandedData.brand} website mockup`}
-                  width={1200}
-                  height={800}
-                  unoptimized={process.env.NODE_ENV !== "production"}
-                  className="retro-tv-overlay__img"
-                />
+                <picture>
+                  {expandedData.mobileImage ? (
+                    <source media="(max-width: 560px)" srcSet={expandedData.mobileImage} />
+                  ) : null}
+                  <Image
+                    src={expandedData.image}
+                    alt={`${expandedData.brand} storefront`}
+                    width={1200}
+                    height={800}
+                    unoptimized={process.env.NODE_ENV !== "production"}
+                    className="retro-tv-overlay__img"
+                  />
+                </picture>
               </div>
 
               <div className="retro-tv-overlay__details">
@@ -346,15 +353,23 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
 
             {/* Channel content — now full-screen image */}
             <div className="retro-tv__channel" style={{ filter: screenFilter }}>
-              <Image
-                src={channel.image}
-                alt={`${channel.brand} website mockup`}
-                width={1200}
-                height={800}
-                unoptimized={process.env.NODE_ENV !== "production"}
-                className="retro-tv__channel-fullimg"
-                priority
-              />
+              {/* On a phone the wide capture shrinks to the point where no
+                  product name or price is readable, which is the whole proof.
+                  The screen turns portrait and shows the phone capture. */}
+              <picture>
+                {channel.mobileImage ? (
+                  <source media="(max-width: 560px)" srcSet={channel.mobileImage} />
+                ) : null}
+                <Image
+                  src={channel.image}
+                  alt={`${channel.brand} storefront`}
+                  width={1200}
+                  height={800}
+                  unoptimized={process.env.NODE_ENV !== "production"}
+                  className="retro-tv__channel-fullimg"
+                  priority
+                />
+              </picture>
               {/* Brand label overlay at bottom */}
               <div className="retro-tv__channel-brand-bar">
                 <span className="retro-tv__channel-brand-name">{channel.brand}</span>

@@ -72,6 +72,7 @@ export default function Home() {
           <EditorialImage
             className="editorial-image--hero"
             src="/images/work-surur-product.jpg"
+            mobileSrc="/images/mobile/surur-product.jpg"
             alt="The Surur product page built by UPSTACK, showing variants and room context"
             caption="A Surur product page: variants, room context, and a clear path to checkout."
             credit="Surur / Shopify"

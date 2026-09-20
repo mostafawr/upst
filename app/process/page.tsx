@@ -16,12 +16,12 @@ export const metadata = pageMetadata({
 // the Odoo interface for the operational ones. Alt text describes the actual
 // screenshot rather than the stage, so it is useful to a screen reader.
 const processStageImages = [
-  { src: "/images/odoo-sales-orders.jpg", alt: "A list of sales orders in Odoo, with customer, salesperson, total, and status" },
+  { src: "/images/odoo-sales-orders.jpg", mobileSrc: undefined, alt: "A list of sales orders in Odoo, with customer, salesperson, total, and status" },
   { src: "/images/odoo-inventory-overview.jpg", alt: "The Odoo inventory overview, showing receipts, delivery orders, and manufacturing" },
-  { src: "/images/work-dress-code-collection.jpg", alt: "The Dress Code collection page built by UPSTACK" },
-  { src: "/images/work-more-cottons-catalogue.jpg", alt: "The More Cottons product catalogue, with filtering and sort" },
+  { src: "/images/work-dress-code-collection.jpg", mobileSrc: "/images/mobile/dress-code-collection.jpg", alt: "The Dress Code collection page built by UPSTACK" },
+  { src: "/images/work-more-cottons-catalogue.jpg", mobileSrc: "/images/mobile/more-cottons-catalogue.jpg", alt: "The More Cottons product catalogue, with filtering and sort" },
   { src: "/images/odoo-accounting-dashboard.jpg", alt: "The Odoo accounting dashboard, showing sales, purchases, and bank reconciliation" },
-  { src: "/images/work-surur-architecture.jpg", alt: "The Surur collection page, with filters for type, stock, price, fabric, and finish" },
+  { src: "/images/work-surur-architecture.jpg", mobileSrc: "/images/mobile/surur-collection.jpg", alt: "The Surur collection page, with filters for type, stock, price, fabric, and finish" },
 ]
 export default function ProcessPage() {
   return (
@@ -38,6 +38,7 @@ export default function ProcessPage() {
           <EditorialImage
             className="editorial-image--hero"
             src="/images/work-dress-code-best-sellers.jpg"
+            mobileSrc="/images/mobile/dress-code-best-sellers.jpg"
             alt="The Dress Code best sellers collection, with availability, price, and size filters"
             caption="A clear sequence, with evidence improving at every stage."
             credit="Dress Code / Shopify"
@@ -79,6 +80,7 @@ export default function ProcessPage() {
               <div className="process-step__image">
                 <EditorialImage
                   src={processStageImages[index].src}
+                  mobileSrc={processStageImages[index].mobileSrc}
                   alt={processStageImages[index].alt}
                   sizes="(max-width: 720px) 100vw, (max-width: 960px) 70vw, 30vw"
                 />
