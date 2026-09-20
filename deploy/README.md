@@ -38,6 +38,19 @@ costs nothing), uploads, restarts, and polls the site for a 200. If the new
 release does not come up, it restores the snapshot, restarts, prints the last
 30 journal lines and exits non-zero.
 
+### Rehearsing the rollback
+
+Point the health check at a host the vhost will not answer with 200. The deploy
+runs for real, fails its check, and restores the snapshot — which is the same
+code it just uploaded, so nothing breaks:
+
+```bash
+DEPLOY_HEALTH_HOST=morecotton-dashboard.online ./deploy/deploy.sh
+```
+
+Expect it to exit non-zero with `did not come up. Rolled back.` and the site to
+still answer 200 afterwards. Worth doing after any change to this script.
+
 The deployed commit is recorded in `/srv/upstack/RELEASE`:
 
 ```bash
