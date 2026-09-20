@@ -19,17 +19,41 @@ the three bindings. Nothing about the application code changes between the two.
 Service: `upstack.service`, user `upstack`, listening on `127.0.0.1:8787`.
 nginx (`/etc/nginx/sites-available/upstack.pro`) terminates TLS and proxies to it.
 
-## Deploying a new build
-
-From a checkout on your machine:
+## Deploying
 
 ```bash
-npm run build
-rsync -az --delete dist drizzle deploy root@161.97.170.182:/srv/upstack/
-ssh root@161.97.170.182 'cd /srv/upstack/deploy && npm install --omit=dev && chown -R upstack:upstack /srv/upstack && systemctl restart upstack'
+git checkout production && git pull
+./deploy/deploy.sh
 ```
 
-`npm install` is only needed when `deploy/package.json` changes.
+That script is the only sanctioned deploy path. It refuses to run unless:
+
+- you are on `production` — not `staging`, not a feature branch;
+- the working tree is clean, so the artefact matches a real commit;
+- local `production` equals `origin/production`, so the deployed commit is one
+  your colleagues can actually see.
+
+It then builds, snapshots the current `dist/` as `dist.prev` (hardlinks, so it
+costs nothing), uploads, restarts, and polls the site for a 200. If the new
+release does not come up, it restores the snapshot, restarts, prints the last
+30 journal lines and exits non-zero.
+
+The deployed commit is recorded in `/srv/upstack/RELEASE`:
+
+```bash
+ssh root@161.97.170.182 cat /srv/upstack/RELEASE
+```
+
+Nothing on the server *enforces* this — anyone with root can rsync whatever they
+like. The gate is the script plus the discipline of using it; `RELEASE` is what
+tells you afterwards whether that held.
+
+## Branches
+
+```
+staging     day-to-day work
+production  what is running on the box
+```
 
 ## Operations
 
