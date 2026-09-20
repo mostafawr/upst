@@ -3452,6 +3452,11 @@ button:hover .arrow-glyph {
     aspect-ratio: 390 / 640;
   }
 
+  /* A cropped slice of a desktop interface is wide, not tall. */
+  .editorial-image[data-mobile-kind="panel"] .editorial-image__frame {
+    aspect-ratio: 530 / 340;
+  }
+
   /* Slightly taller than the capture so the brand bar gets a strip of its own
      at the bottom instead of sitting on top of the storefront's buy button.
      `contain` is what leaves that strip; `cover` would scale the capture up

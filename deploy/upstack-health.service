@@ -1,0 +1,7 @@
+[Unit]
+Description=Check that upstack.pro is serving, restart it if not
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/srv/upstack/deploy/healthcheck.sh

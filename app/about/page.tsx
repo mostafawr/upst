@@ -12,7 +12,7 @@ import {
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "About",
+  title: "Shopify & Odoo Commerce Partner",
   description:
     "UPSTACK is a specialized commerce systems partner connecting customer-facing Shopify experiences with Odoo operations.",
   path: "/about",
@@ -159,6 +159,8 @@ export default function AboutPage() {
         <EditorialImage
           className="editorial-image--strip"
           src="/images/odoo-inventory-overview.jpg"
+          mobileSrc="/images/mobile/odoo-delivery-orders.jpg"
+          mobileKind="panel"
           alt="The Odoo inventory interface, showing receipts, delivery orders, and manufacturing"
           caption="Receipts, deliveries, and manufacturing tracked in one operational view."
           credit="Odoo interface"

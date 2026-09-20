@@ -5,9 +5,9 @@ import { workPage } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Work",
+  title: "Shopify & Odoo Case Studies",
   description:
-    "Explore UPSTACK's portfolio of Shopify storefronts and commerce systems — presented as mockup websites inside a retro CRT television.",
+    "Live Shopify storefronts and connected Odoo operations UPSTACK has built and runs — Surur, Dress Code, and More Cottons. Walk through each build.",
   path: "/work",
 });
 

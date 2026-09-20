@@ -4,6 +4,7 @@ import { leads } from "@/db/schema";
 import { budgetChoices } from "@/lib/content";
 import type { LeadPayload } from "@/lib/lead-payload";
 import { hasNotificationSink, notifyLead } from "@/lib/lead-notification";
+import { checkRateLimit, clientAddress } from "@/lib/rate-limit";
 
 const requiredTextFields = ["fullName", "email", "phone", "budget"] as const;
 
@@ -40,6 +41,17 @@ function isAllowed(value: string, choices: readonly string[]) {
 }
 
 export async function POST(request: Request) {
+  // Before parsing anything: an open form endpoint on a public origin gets
+  // found. Three enquiries in ten minutes is well past what a real person
+  // sends and well short of anything a genuine one would hit.
+  const limit = checkRateLimit(clientAddress(request));
+  if (!limit.ok) {
+    return Response.json(
+      { message: "Too many enquiries from this connection. Please try again shortly." },
+      { status: 429, headers: { "retry-after": String(limit.retryAfter) } },
+    );
+  }
+
   let incoming: ContactPayload;
 
   try {

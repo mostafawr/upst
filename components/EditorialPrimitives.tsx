@@ -76,6 +76,12 @@ export interface EditorialImageProps {
    * a smaller file: a different picture for a different viewport.
    */
   mobileSrc?: string;
+  /**
+   * Shape of `mobileSrc`. "phone" is a whole handset screen (tall); "panel" is
+   * a cropped region of a desktop interface (wide). They need different frames,
+   * so the caller says which it handed over.
+   */
+  mobileKind?: "phone" | "panel";
   alt: string;
   caption?: ReactNode;
   credit?: ReactNode;
@@ -93,6 +99,7 @@ export interface EditorialImageProps {
 export function EditorialImage({
   src,
   mobileSrc,
+  mobileKind = "phone",
   alt,
   caption,
   credit,
@@ -115,6 +122,7 @@ export function EditorialImage({
       className={joinClasses("editorial-image", className)}
       data-variant={variant}
       data-has-mobile={mobileSrc ? "true" : undefined}
+      data-mobile-kind={mobileSrc ? mobileKind : undefined}
     >
       <div className="editorial-image__frame">
         {/* <source> wins over the <img> srcset when its media matches, so the

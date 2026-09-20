@@ -67,6 +67,20 @@ export default function StructuredData({ origin }: StructuredDataProps) {
         "Conversion optimization",
       ],
     },
+    // Names the main sections explicitly, which is what search engines read
+    // when deciding whether to show sitelinks under the brand result.
+    {
+      "@type": "SiteNavigationElement",
+      "@id": `${origin}/#navigation`,
+      name: ["Capabilities", "Work", "Process", "About", "Contact"],
+      url: [
+        `${origin}/capabilities`,
+        `${origin}/work`,
+        `${origin}/process`,
+        `${origin}/about`,
+        `${origin}/contact`,
+      ],
+    },
     // Each live client build, so the work claims are machine-readable too.
     ...workEntries.map((entry) => ({
       "@type": "CreativeWork",

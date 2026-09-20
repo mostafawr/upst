@@ -8,7 +8,7 @@ import { capabilitiesPage, capabilityDetails } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Capabilities",
+  title: "Shopify Development & Odoo Implementation",
   description:
     "Shopify design and development, Odoo implementation, platform integration, conversion optimization, reporting, and ongoing systems support.",
   path: "/capabilities",
@@ -121,6 +121,8 @@ export default function CapabilitiesPage() {
         <EditorialImage
           className="editorial-image--strip"
           src="/images/odoo-inventory-overview.jpg"
+          mobileSrc="/images/mobile/odoo-delivery-orders.jpg"
+          mobileKind="panel"
           alt="The Odoo inventory interface, where incoming receipts hand off to outgoing deliveries"
           caption="Reliable systems are built at the handoffs."
           credit="Odoo interface"

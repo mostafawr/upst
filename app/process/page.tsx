@@ -6,7 +6,7 @@ import { processPage, processSteps } from "@/lib/content";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata = pageMetadata({
-  title: "Process",
+  title: "How We Build Shopify & Odoo Systems",
   description:
     "UPSTACK's six-stage process for discovering, architecting, designing, building, integrating, and growing Shopify and Odoo commerce systems.",
   path: "/process",
@@ -16,12 +16,12 @@ export const metadata = pageMetadata({
 // the Odoo interface for the operational ones. Alt text describes the actual
 // screenshot rather than the stage, so it is useful to a screen reader.
 const processStageImages = [
-  { src: "/images/odoo-sales-orders.jpg", mobileSrc: undefined, alt: "A list of sales orders in Odoo, with customer, salesperson, total, and status" },
-  { src: "/images/odoo-inventory-overview.jpg", alt: "The Odoo inventory overview, showing receipts, delivery orders, and manufacturing" },
-  { src: "/images/work-dress-code-collection.jpg", mobileSrc: "/images/mobile/dress-code-collection.jpg", alt: "The Dress Code collection page built by UPSTACK" },
-  { src: "/images/work-more-cottons-catalogue.jpg", mobileSrc: "/images/mobile/more-cottons-catalogue.jpg", alt: "The More Cottons product catalogue, with filtering and sort" },
-  { src: "/images/odoo-accounting-dashboard.jpg", alt: "The Odoo accounting dashboard, showing sales, purchases, and bank reconciliation" },
-  { src: "/images/work-surur-architecture.jpg", mobileSrc: "/images/mobile/surur-collection.jpg", alt: "The Surur collection page, with filters for type, stock, price, fabric, and finish" },
+  { src: "/images/odoo-sales-orders.jpg", mobileSrc: undefined, mobileKind: undefined, alt: "A list of sales orders in Odoo, with customer, salesperson, total, and status" },
+  { src: "/images/odoo-inventory-overview.jpg", mobileSrc: "/images/mobile/odoo-delivery-orders.jpg", mobileKind: "panel" as const, alt: "The Odoo inventory overview, showing receipts, delivery orders, and manufacturing" },
+  { src: "/images/work-dress-code-collection.jpg", mobileSrc: "/images/mobile/dress-code-collection.jpg", mobileKind: "phone" as const, alt: "The Dress Code collection page built by UPSTACK" },
+  { src: "/images/work-more-cottons-catalogue.jpg", mobileSrc: "/images/mobile/more-cottons-catalogue.jpg", mobileKind: "phone" as const, alt: "The More Cottons product catalogue, with filtering and sort" },
+  { src: "/images/odoo-accounting-dashboard.jpg", mobileSrc: "/images/mobile/odoo-bank.jpg", mobileKind: "panel" as const, alt: "The Odoo accounting dashboard, showing sales, purchases, and bank reconciliation" },
+  { src: "/images/work-surur-architecture.jpg", mobileSrc: "/images/mobile/surur-collection.jpg", mobileKind: "phone" as const, alt: "The Surur collection page, with filters for type, stock, price, fabric, and finish" },
 ]
 export default function ProcessPage() {
   return (
@@ -81,6 +81,7 @@ export default function ProcessPage() {
                 <EditorialImage
                   src={processStageImages[index].src}
                   mobileSrc={processStageImages[index].mobileSrc}
+                  mobileKind={processStageImages[index].mobileKind}
                   alt={processStageImages[index].alt}
                   sizes="(max-width: 720px) 100vw, (max-width: 960px) 70vw, 30vw"
                 />
