@@ -1,0 +1,38 @@
+[Unit]
+Description=UPSTACK website (Cloudflare Worker bundle on Miniflare)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=upstack
+Group=upstack
+WorkingDirectory=/srv/upstack
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=8787
+Environment=PERSIST_DIR=/srv/upstack/data
+ExecStart=/usr/bin/node /srv/upstack/deploy/server.mjs
+Restart=always
+RestartSec=3
+# Miniflare's own exit hooks re-raise SIGTERM once workerd is torn down, so the
+# process reports 128+15 on a clean stop.
+SuccessExitStatus=143
+KillSignal=SIGTERM
+TimeoutStopSec=20
+
+# The service only needs to read its own tree and write its data directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/upstack/data
+# workerd maps executable memory for its JIT.
+MemoryDenyWriteExecute=false
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=upstack
+
+[Install]
+WantedBy=multi-user.target

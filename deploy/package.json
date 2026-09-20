@@ -1,0 +1,9 @@
+{
+  "name": "upstack-runtime",
+  "private": true,
+  "type": "module",
+  "description": "Runtime-only dependencies for the self-hosted Worker. Kept separate from the app package so the VPS never installs the build toolchain.",
+  "dependencies": {
+    "miniflare": "4.20260515.0"
+  }
+}

@@ -45,3 +45,7 @@ next-env.d.ts
 
 # playwright-cli session artifacts
 .playwright-cli/
+
+# Self-hosted runtime state (deploy/server.mjs)
+.data/
+deploy/node_modules/

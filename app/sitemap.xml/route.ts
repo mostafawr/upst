@@ -1,3 +1,5 @@
+import { requestOrigin } from "@/lib/request-origin";
+
 const routes = [
   "",
   "/capabilities",
@@ -19,7 +21,7 @@ function escapeXml(value: string) {
 }
 
 export function GET(request: Request) {
-  const origin = new URL(request.url).origin;
+  const origin = requestOrigin(request);
   const urls = routes
     .map(
       (route) =>
