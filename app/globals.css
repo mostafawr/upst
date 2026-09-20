@@ -3284,6 +3284,176 @@ button:hover .arrow-glyph {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Phone refinements
+   ---------------------------------------------------------------------------
+   The editorial type scale leans on very small tracked labels, which read well
+   at desktop sizes and become illegible on a handset. These rules raise the
+   floor on that text and bring touch targets up to a thumb-sized minimum,
+   without touching the desktop composition.
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 560px) {
+  /* Legibility floor. 9-11px tracked capitals are the worst offenders: they
+     are the captions, credits and eyebrows that carry the proof. */
+  .editorial-image__caption-text,
+  .editorial-image__credit,
+  .retro-tv__channel-brand-cat,
+  .tag {
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .eyebrow,
+  .microcopy,
+  .card-label,
+  .section-label,
+  .editorial-eyebrow,
+  .site-header__menu-label,
+  .contact-form__optional,
+  .site-footer__legal-link,
+  .site-footer__legal,
+  .site-footer__nav-link,
+  .site-footer__callout-link,
+  .cta-block__link,
+  .retro-tv__click-hint,
+  .contact-form__submit-button,
+  .contact-form__secondary-button,
+  .button {
+    font-size: 0.78rem;
+  }
+
+  .site-header__metadata span {
+    font-size: 0.72rem;
+  }
+
+  /* Slightly looser tracking, because raising the size of letter-spaced
+     capitals without relaxing the spacing makes the line feel cramped. */
+  .eyebrow,
+  .card-label,
+  .section-label,
+  .editorial-eyebrow {
+    letter-spacing: 0.14em;
+  }
+
+  /* These labels introduce a new block but carry no space above them. On a
+     wide column the eye separates them anyway; in a narrow one they collide
+     with the end of the paragraph they follow. */
+  p + .section-label,
+  p + .field-label {
+    display: block;
+    margin-top: 1.4rem;
+  }
+
+  /* Touch targets. 44px is the smallest reliably tappable box; these were
+     14-38px. Padding rather than height keeps the rules and baselines intact. */
+  .site-footer__nav-link,
+  .site-footer__callout-link {
+    align-items: center;
+    display: flex;
+    min-height: 44px;
+  }
+
+  .site-footer__legal-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .text-link {
+    align-items: center;
+    display: inline-flex;
+    min-height: 44px;
+  }
+
+  /* The carousel is the one piece of real navigation on /work, and its
+     controls were the smallest things on the site: 32px arrows and 8px dots. */
+  .retro-tv__nav {
+    height: 44px;
+    width: 44px;
+  }
+
+  /* The dot is an 8px ring by design. Rather than inflate it, hang an
+     invisible 44px hit area off it: the target grows, the design does not.
+     The gap is widened to 2.5rem so neighbouring hit areas do not overlap. */
+  .retro-tv__channel-dots {
+    gap: 2.5rem;
+  }
+
+  .retro-tv__dot {
+    position: relative;
+  }
+
+  .retro-tv__dot::after {
+    content: "";
+    height: 44px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+  }
+
+  /* Reclaim the side padding the wider dot row now needs. */
+  .retro-tv__controls {
+    gap: 1rem;
+    padding: 1rem 1.25rem 1.3rem;
+  }
+}
+
+/* The brightness and contrast knobs are mouse-drag only, so on a touch device
+   they are decoration that squeezes the channel dots into the middle third of
+   the panel. Hide them there and give the dots the full width. */
+@media (pointer: coarse) {
+  .retro-tv__controls .retro-tv__control-group {
+    display: none;
+  }
+
+  .retro-tv__controls {
+    justify-content: center;
+  }
+}
+
+/* Below ~430px the 48px number gutter costs an eighth of the line length, and
+   the copy beside it starts breaking badly. Stack instead: the number keeps
+   its editorial role as a marker above the entry rather than beside it. */
+@media (max-width: 430px) {
+  .capability-ledger__row,
+  .process-preview__row,
+  .process-step {
+    grid-template-columns: 1fr;
+  }
+
+  .capability-ledger__heading,
+  .capability-ledger__copy,
+  .capability-ledger__deliverables,
+  .process-preview__title,
+  .process-preview__summary,
+  .process-step__title,
+  .process-step__copy,
+  .process-step__image {
+    grid-column: 1;
+  }
+
+  /* The heading reserved a gutter for the column that no longer sits beside it. */
+  .capability-ledger__heading {
+    padding-right: 0;
+  }
+
+  .capability-ledger__index,
+  .process-preview__index,
+  .process-step__number {
+    margin-bottom: 0.4rem;
+    padding-right: 0;
+  }
+
+  /* This reserved space for copy that sat alongside the number; stacked, it
+     just leaves a hole. */
+  .process-step__title {
+    min-height: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

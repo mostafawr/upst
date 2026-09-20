@@ -20,6 +20,9 @@ interface RetroTVCarouselProps {
   channels: TVChannel[];
 }
 
+/** Horizontal travel, in px, before a touch is treated as a swipe not a tap. */
+const SWIPE_THRESHOLD = 40;
+
 export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
   const [currentChannel, setCurrentChannel] = useState(0);
   const [isGlitching, setIsGlitching] = useState(false);
@@ -30,6 +33,11 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
   const [isExpanding, setIsExpanding] = useState(false);
   const [isCollapsing, setIsCollapsing] = useState(false);
   const osdTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Where a touch began, and whether it travelled far enough to count as a
+  // swipe rather than a tap. Without this the swipe would also open the
+  // project, because a touch that moves still fires a click.
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const didSwipe = useRef(false);
 
   const channel = channels[currentChannel];
   const totalChannels = channels.length;
@@ -63,6 +71,10 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
   // Click to expand
   const handleScreenClick = useCallback(() => {
     if (expandedChannel !== null) return;
+    if (didSwipe.current) {
+      didSwipe.current = false;
+      return;
+    }
     setIsExpanding(true);
     // Brief glitch before expand
     triggerGlitch();
@@ -71,6 +83,33 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
       setIsExpanding(false);
     }, 400);
   }, [currentChannel, expandedChannel, triggerGlitch]);
+
+  // Swiping is how people expect to change a slide on a phone; the arrows are
+  // small and sit over the image. A gesture counts as a swipe only when it is
+  // mostly horizontal, so it does not fight the page's vertical scroll.
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+    didSwipe.current = false;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      const start = touchStart.current;
+      touchStart.current = null;
+      if (!start || expandedChannel !== null) return;
+
+      const t = e.changedTouches[0];
+      const dx = t.clientX - start.x;
+      const dy = t.clientY - start.y;
+
+      if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) <= Math.abs(dy)) return;
+
+      didSwipe.current = true;
+      goToChannel(dx < 0 ? "next" : "prev");
+    },
+    [expandedChannel, goToChannel]
+  );
 
   // Close expanded view
   const handleClose = useCallback(() => {
@@ -245,7 +284,11 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
         </div>
 
         {/* Screen Area */}
-        <div className="retro-tv__screen-wrapper">
+        <div
+          className="retro-tv__screen-wrapper"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           {/* Navigation arrows */}
           <button
             className="retro-tv__nav retro-tv__nav--prev"
@@ -298,7 +341,7 @@ export default function RetroTVCarousel({ channels }: RetroTVCarouselProps) {
 
             {/* "Click to view" hint */}
             <div className="retro-tv__click-hint">
-              <span>Click to view project</span>
+              <span>View project</span>
             </div>
 
             {/* Channel content — now full-screen image */}
